@@ -98,6 +98,16 @@ document.addEventListener('DOMContentLoaded', () => {
       evaluatePasswordStrength(passwordInput.value);
     });
   }
+
+  const registerForm = document.getElementById('restaurant-register-form');
+  if (registerForm) {
+    registerForm.addEventListener('submit', (event) => {
+      if (currentStep < totalSteps) {
+        event.preventDefault();
+        goToStep(currentStep + 1);
+      }
+    });
+  }
 });
 
 function evaluatePasswordStrength(password) {
