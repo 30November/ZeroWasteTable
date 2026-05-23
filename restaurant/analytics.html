@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroWasteTable — Restaurant Analytics</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberDark: '#050505',
+            cyberCard: '#0D0F12',
+            ecoGreen: '#10B981',
+            techBlue: '#3B82F6',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-cyberDark text-gray-100 flex min-h-screen relative overflow-x-hidden">
+
+  <!-- COLLAPSIBLE SIDEBAR MENU -->
+  <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass border-r border-white/5 p-6 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="space-y-8">
+      <!-- Sidebar Logo -->
+      <a href="../index.html" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <span class="font-bold text-base text-gray-200">ZeroWasteTable</span>
+      </a>
+
+      <!-- User card details -->
+      <div class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-ecoGreen/10 flex items-center justify-center text-ecoGreen font-bold">
+          GP
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-200">Grand Palace Hotel</h4>
+          <span class="text-[9px] text-gray-500 font-mono tracking-widest uppercase">FSSAI: 123456789</span>
+        </div>
+      </div>
+
+      <!-- Navigation links -->
+      <nav class="space-y-1">
+        <a href="dashboard.html" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="create-listing.html" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Create Listing</span>
+        </a>
+        <a href="active-listings.html" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <span>Active Listings</span>
+        </a>
+        <a href="analytics.html" class="sidebar-link active-green">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          <span>Analytics</span>
+        </a>
+        <a href="notifications.html" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+          <span>Notifications</span>
+        </a>
+        <a href="profile.html" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          <span>Outlet Profile</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <a href="../auth/select-role.html" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      <span>Logout</span>
+    </a>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 lg:pl-64 min-h-screen flex flex-col justify-between pb-20 lg:pb-0 relative z-10">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="h-20 glass border-b border-white/5 px-6 sm:px-8 flex justify-between items-center sticky top-0 z-30">
+      <div class="flex items-center gap-4">
+        <button onclick="document.getElementById('dashboard-sidebar').classList.toggle('-translate-x-full')" class="lg:hidden p-2 text-gray-400 hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h2 class="text-xl font-bold text-gray-100">Environmental Analytics</h2>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="flex-grow p-6 sm:p-8 space-y-8 max-w-7xl mx-auto w-full">
+      
+      <!-- Top Overview Stats grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="glass p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 uppercase font-semibold">Total Meals Fed</span>
+            <h4 class="text-2xl font-black font-mono text-gray-100 mt-1">3,450 meals</h4>
+          </div>
+          <div class="text-ecoGreen text-xs font-semibold">↑ +15%</div>
+        </div>
+
+        <div class="glass p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 uppercase font-semibold">CO₂ Offset (YTD)</span>
+            <h4 class="text-2xl font-black font-mono text-gray-100 mt-1">3.2 metric tons</h4>
+          </div>
+          <div class="text-ecoGreen text-xs font-semibold">↑ +24%</div>
+        </div>
+
+        <div class="glass p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 uppercase font-semibold">Average Match Time</span>
+            <h4 class="text-2xl font-black font-mono text-gray-100 mt-1">14.5 minutes</h4>
+          </div>
+          <div class="text-emerald-400 text-xs font-semibold">Optimal</div>
+        </div>
+      </div>
+
+      <!-- VISUALIZATIONS GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Chart 1: Donation Trends over Time (Line Chart) -->
+        <div class="lg:col-span-2 glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <h4 class="text-base font-bold text-gray-200">Surplus Food Donated Trends (Weekly)</h4>
+          <div class="h-64 relative">
+            <canvas id="donation-trends-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Food Type Distribution (Doughnut Chart) -->
+        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <h4 class="text-base font-bold text-gray-200">Dietary Categories Match</h4>
+          <div class="h-64 relative flex items-center justify-center">
+            <canvas id="food-dist-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: Carbon Offset Offset by Month (Bar Chart) -->
+        <div class="lg:col-span-3 glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <h4 class="text-base font-bold text-gray-200">Greenhouse CO₂ Emission Reductions (kg)</h4>
+          <div class="h-64 relative">
+            <canvas id="co2-savings-chart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="h-16 px-8 border-t border-white/5 flex items-center justify-between text-[10px] text-gray-500">
+      <span>© 2026 ZeroWasteTable Restaurant Dashboard node</span>
+      <span>UN SDGs: #2 Zero Hunger, #12 Consumption, #13 Climate</span>
+    </footer>
+
+  </main>
+
+  <!-- MOBILE BOTTOM BAR NAVIGATION -->
+  <div class="bottom-nav lg:hidden">
+    <a href="dashboard.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+      <span class="text-[9px]">Home</span>
+    </a>
+    <a href="create-listing.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span class="text-[9px]">Add Listing</span>
+    </a>
+    <a href="active-listings.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+      <span class="text-[9px]">Listings</span>
+    </a>
+    <a href="analytics.html" class="flex flex-col items-center gap-1 text-ecoGreen">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+      <span class="text-[9px] font-bold">Charts</span>
+    </a>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script src="../js/charts.js"></script>
+</body>
+</html>
