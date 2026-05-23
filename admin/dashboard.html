@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroWasteTable — Admin Console</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberDark: '#050505',
+            cyberCard: '#0D0F12',
+            ecoGreen: '#10B981',
+            techBlue: '#3B82F6',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-cyberDark text-gray-100 flex min-h-screen relative overflow-x-hidden">
+
+  <!-- COLLAPSIBLE SIDEBAR MENU -->
+  <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass border-r border-white/5 p-6 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="space-y-8">
+      <!-- Sidebar Logo -->
+      <a href="../index.html" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center">
+          <i data-lucide="shield" class="w-4 h-4 text-white"></i>
+        </div>
+        <span class="font-bold text-base text-gray-200">ZeroWasteTable</span>
+      </a>
+
+      <!-- User card details -->
+      <div class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 font-bold">
+          AD
+        </div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-200">System Admin</h4>
+          <span class="text-[9px] text-gray-500 font-mono tracking-widest uppercase">ROLE: GLOBAL_ADMIN</span>
+        </div>
+      </div>
+
+      <!-- Navigation links -->
+      <nav class="space-y-1">
+        <a href="dashboard.html" class="sidebar-link active-purple" style="color: #a855f7; border-left: 3px solid #a855f7; background: rgba(168, 85, 247, 0.08);">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Overview</span>
+        </a>
+        <a href="#" onclick="showToast('Loading partner directories...', 'info')" class="sidebar-link">
+          <i data-lucide="users" class="w-5 h-5"></i>
+          <span>Partner Network</span>
+        </a>
+        <a href="#" onclick="showToast('Loading compliance logs...', 'info')" class="sidebar-link">
+          <i data-lucide="file-check" class="w-5 h-5"></i>
+          <span>FSSAI Audits</span>
+        </a>
+        <a href="#" onclick="showToast('Loading system configurations...', 'info')" class="sidebar-link">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <a href="../auth/select-role.html" onclick="logoutUser(event)" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
+      <i data-lucide="log-out" class="w-5 h-5"></i>
+      <span>Logout</span>
+    </a>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 lg:pl-64 min-h-screen flex flex-col justify-between pb-20 lg:pb-0 relative z-10">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="h-20 glass border-b border-white/5 px-6 sm:px-8 flex justify-between items-center sticky top-0 z-30">
+      <div class="flex items-center gap-4">
+        <!-- Sidebar Toggle Trigger -->
+        <button onclick="document.getElementById('dashboard-sidebar').classList.toggle('-translate-x-full')" class="lg:hidden p-2 text-gray-400 hover:text-white">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+        <h2 class="text-xl font-bold text-gray-100 hidden sm:block">Admin Console</h2>
+      </div>
+
+      <!-- Quick user actions -->
+      <div class="flex items-center gap-4">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-950/40 border border-purple-800/40 text-[10px] text-purple-400 font-semibold font-mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span> CONSOLE ONLINE
+        </span>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="flex-grow p-6 sm:p-8 space-y-8 max-w-7xl mx-auto w-full">
+      
+      <!-- HERO BANNER -->
+      <div class="glass p-6 sm:p-8 rounded-3xl border border-white/10 relative overflow-hidden bg-gradient-to-r from-purple-950/20 to-techBlue/5">
+        <div class="absolute -right-20 -bottom-20 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="max-w-2xl space-y-3">
+          <h3 class="text-2xl font-black text-white">System Global Overview</h3>
+          <p class="text-sm text-gray-400 font-light leading-relaxed">
+            Monitor verified NGO capacities, audit FSSAI listings compliance, and coordinate system backups from this command center.
+          </p>
+        </div>
+      </div>
+
+      <!-- MAIN STATISTICS GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Stat 1 -->
+        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Active Donors</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-ecoGreen">
+              <i data-lucide="store" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-3xl font-black font-mono">254</h4>
+            <p class="text-[10px] text-ecoGreen font-semibold flex items-center gap-1">↑ +8 new this week</p>
+          </div>
+        </div>
+
+        <!-- Stat 2 -->
+        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Verified NGOs</span>
+            <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-techBlue">
+              <i data-lucide="heart" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-3xl font-black font-mono">142</h4>
+            <p class="text-[10px] text-techBlue font-semibold">12 pending verification</p>
+          </div>
+        </div>
+
+        <!-- Stat 3 -->
+        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Verification Queue</span>
+            <div class="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center text-yellow-400">
+              <i data-lucide="clock" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 id="pending-count" class="text-3xl font-black text-yellow-400 font-mono">3</h4>
+            <p class="text-[10px] text-gray-500 font-light">Requires manual review</p>
+          </div>
+        </div>
+
+        <!-- Stat 4 -->
+        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Global Diverted</span>
+            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
+              <i data-lucide="leaf" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-3xl font-black font-mono">38.2t</h4>
+            <p class="text-[10px] text-purple-400 font-semibold">CO₂ saved: 95.6 tons</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUDIT WORKFLOW & SERVICE MONITOR -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Verification Approval Queue -->
+        <div class="lg:col-span-2 glass p-6 rounded-2xl border border-white/5 space-y-6">
+          <div class="flex justify-between items-center">
+            <h4 class="text-lg font-bold text-gray-200 font-heading">Partner Verification Audits</h4>
+            <span class="text-xs text-gray-400">FSSAI Compliance Check</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-white/5 text-gray-500 font-mono uppercase tracking-wider">
+                  <th class="py-3 pr-4">Applicant</th>
+                  <th class="py-3 px-4">Type</th>
+                  <th class="py-3 px-4">Certificate ID</th>
+                  <th class="py-3 text-center">Compliance</th>
+                  <th class="py-3 pl-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-body" class="divide-y divide-white/5 text-gray-300 font-light">
+                <tr id="row-1">
+                  <td class="py-3.5 pr-4 font-semibold text-gray-100">Royal Biryani Cafe</td>
+                  <td class="py-3.5 px-4 font-mono">Restaurant</td>
+                  <td class="py-3.5 px-4 font-mono text-gray-400">FSSAI-8976-C5</td>
+                  <td class="py-3.5 px-4 text-center">
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase">VALID</span>
+                  </td>
+                  <td class="py-3.5 pl-4 text-right flex justify-end gap-2">
+                    <button onclick="approvePartner('row-1', 'Royal Biryani Cafe')" class="px-2.5 py-1 rounded bg-ecoGreen text-cyberDark font-bold text-[10px] hover:bg-emerald-400 transition-colors">Approve</button>
+                    <button onclick="declinePartner('row-1', 'Royal Biryani Cafe')" class="px-2.5 py-1 rounded bg-red-600/20 border border-red-500/30 text-red-400 font-bold text-[10px] hover:bg-red-600/40 transition-colors">Reject</button>
+                  </td>
+                </tr>
+                <tr id="row-2">
+                  <td class="py-3.5 pr-4 font-semibold text-gray-100">Save Lives Shelter</td>
+                  <td class="py-3.5 px-4 font-mono">NGO</td>
+                  <td class="py-3.5 px-4 font-mono text-gray-400">NGO-1928-B4</td>
+                  <td class="py-3.5 px-4 text-center">
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase">VALID</span>
+                  </td>
+                  <td class="py-3.5 pl-4 text-right flex justify-end gap-2">
+                    <button onclick="approvePartner('row-2', 'Save Lives Shelter')" class="px-2.5 py-1 rounded bg-ecoGreen text-cyberDark font-bold text-[10px] hover:bg-emerald-400 transition-colors">Approve</button>
+                    <button onclick="declinePartner('row-2', 'Save Lives Shelter')" class="px-2.5 py-1 rounded bg-red-600/20 border border-red-500/30 text-red-400 font-bold text-[10px] hover:bg-red-600/40 transition-colors">Reject</button>
+                  </td>
+                </tr>
+                <tr id="row-3">
+                  <td class="py-3.5 pr-4 font-semibold text-gray-100">Daily Bakers</td>
+                  <td class="py-3.5 px-4 font-mono">Restaurant</td>
+                  <td class="py-3.5 px-4 font-mono text-gray-400">FSSAI-0023-D1</td>
+                  <td class="py-3.5 px-4 text-center">
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-red-950/60 border border-red-800/40 text-red-400 uppercase">EXPIRED</span>
+                  </td>
+                  <td class="py-3.5 pl-4 text-right flex justify-end gap-2">
+                    <button onclick="approvePartner('row-3', 'Daily Bakers')" class="px-2.5 py-1 rounded bg-ecoGreen text-cyberDark font-bold text-[10px] hover:bg-emerald-400 transition-colors">Approve</button>
+                    <button onclick="declinePartner('row-3', 'Daily Bakers')" class="px-2.5 py-1 rounded bg-red-600/20 border border-red-500/30 text-red-400 font-bold text-[10px] hover:bg-red-600/40 transition-colors">Reject</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Live Server Log stream / Console monitor -->
+        <div class="glass p-6 rounded-2xl border border-white/5 space-y-6">
+          <h4 class="text-lg font-bold text-gray-200">System Logs Monitor</h4>
+          <div class="bg-black/50 border border-white/5 rounded-xl p-4 font-mono text-[10px] text-emerald-500 h-48 overflow-y-auto space-y-2" id="log-monitor-screen">
+            <div>[INFO] System startup successful.</div>
+            <div>[INFO] CartoDB map layers initialized.</div>
+            <div>[WARN] DB connection pool: 84% usage.</div>
+            <div>[SUCCESS] Backup completed.</div>
+          </div>
+          <button onclick="clearSystemLogs()" class="w-full py-2.5 rounded-xl bg-white/5 border border-white/5 text-center text-xs font-bold hover:bg-white/10 text-gray-300">Clear Audit Logs</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="h-16 px-8 border-t border-white/5 flex items-center justify-between text-[10px] text-gray-500">
+      <span>© 2026 ZeroWasteTable Administration Node</span>
+      <span>System Authorization JWT Verified</span>
+    </footer>
+
+  </main>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- Lucide & Auth Scripts -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    let pendingCount = 3;
+
+    function approvePartner(rowId, partnerName) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.remove();
+        pendingCount--;
+        document.getElementById('pending-count').textContent = pendingCount;
+        logAction(`SUCCESS: Verified and approved partner: ${partnerName}`);
+        if (typeof showToast === 'function') {
+          showToast(`Approved ${partnerName}! Credentials dispatched.`, 'success');
+        }
+      }
+    }
+
+    function declinePartner(rowId, partnerName) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.remove();
+        pendingCount--;
+        document.getElementById('pending-count').textContent = pendingCount;
+        logAction(`WARN: Registration rejected for partner: ${partnerName}`);
+        if (typeof showToast === 'function') {
+          showToast(`Rejected ${partnerName}. Registration queue updated.`, 'error');
+        }
+      }
+    }
+
+    function logAction(text) {
+      const monitor = document.getElementById('log-monitor-screen');
+      if (monitor) {
+        const time = new Date().toLocaleTimeString();
+        const div = document.createElement('div');
+        div.textContent = `[${time}] ${text}`;
+        monitor.appendChild(div);
+        monitor.scrollTop = monitor.scrollHeight;
+      }
+    }
+
+    function clearSystemLogs() {
+      const monitor = document.getElementById('log-monitor-screen');
+      if (monitor) {
+        monitor.innerHTML = `<div>[INFO] Console logs cleared. Monitor active.</div>`;
+      }
+    }
+
+    // Auto log mock stream events occasionally
+    setInterval(() => {
+      const events = [
+        "INFO: Dispatch model calculated for volunteer #A-07",
+        "WARN: Listing #L-897 expiring in 15 mins",
+        "INFO: Temperature log updated for Grand Palace Hotel",
+        "SUCCESS: 12 kg bakery surplus redirected successfully",
+        "INFO: System sync completed with active Leaflet nodes"
+      ];
+      const randomEvent = events[Math.floor(Math.random() * events.length)];
+      logAction(randomEvent);
+    }, 15000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Active Maps – ZeroWasteTable</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    #map {
+      width: 100%;
+      height: 80vh;
+    }
+  </style>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+</head>
+<body class="bg-gray-50 flex flex-col items-center">
+  <nav class="w-full bg-white shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-semibold text-gray-800">ZeroWasteTable – Active Maps</h1>
+    <a href="../index.html" class="text-blue-600 hover:underline">Home</a>
+  </nav>
+
+  <main class="w-full max-w-5xl mt-6">
+    <!-- Filter controls -->
+    <div class="flex flex-wrap gap-4 mb-4" id="filter-controls">
+      <label class="inline-flex items-center">
+        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" value="Cafe" checked />
+        <span class="ml-2 text-gray-700">Café</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" value="Supermarket" checked />
+        <span class="ml-2 text-gray-700">Supermarket</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="checkbox" class="form-checkbox h-5 w-5 text-red-600" value="Hotel" checked />
+        <span class="ml-2 text-gray-700">Hotel</span>
+      </label>
+    </div>
+    <div id="map" class="rounded-lg shadow-lg h-96"></div>
+  </main>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- MarkerCluster JS -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="../js/active-maps.js"></script>
+</body>
+</html>

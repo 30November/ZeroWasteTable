@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZeroWasteTable — Connecting Excess Food with Empty Plates</title>
   <meta name="description" content="A futuristic tech-driven food waste redirection platform. Connecting restaurants, hotels, and supermarkets with NGOs and volunteers to combat hunger and reduce CO2 emissions.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='url(%23g)'/><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2310B981'/><stop offset='1' stop-color='%233B82F6'/></linearGradient></defs><path stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none' d='M16 7v1m0 16v1m9-9h-1M8 16H7m13.364-6.364-.707.707M9.343 22.657l-.707.707m12.728 0-.707-.707M9.343 9.343l-.707-.707M18 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0z'/></svg>">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -21,109 +25,170 @@
       }
     }
   </script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-cyberDark text-gray-100 bg-grid-pattern relative overflow-x-hidden">
 
-  <!-- Radial Background Glows -->
-  <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-radial-gradient-green opacity-70 pointer-events-none -z-10 animate-pulse"></div>
-  <div class="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-radial-gradient-blue opacity-50 pointer-events-none -z-10"></div>
+  <!-- =====================
+       PAGE LOADING SPINNER
+       ===================== -->
+  <div id="page-loader" role="status" aria-label="Loading ZeroWasteTable">
+    <div class="loader-logo">
+      <svg width="28" height="28" fill="none" stroke="white" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+    </div>
+    <div class="loader-spinner"></div>
+    <span class="loader-text">Loading ZeroWasteTable…</span>
+  </div>
 
-  <!-- Header / Navigation -->
+  <!-- =====================
+       TOAST CONTAINER
+       ===================== -->
+  <div id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- =====================
+       BACK TO TOP BUTTON
+       ===================== -->
+  <button id="back-to-top" aria-label="Back to top">
+    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+    </svg>
+  </button>
+
+  <!-- Radial Background Glows -->
+  <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-radial-gradient-green opacity-70 pointer-events-none -z-10 animate-pulse" aria-hidden="true"></div>
+  <div class="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-radial-gradient-blue opacity-50 pointer-events-none -z-10" aria-hidden="true"></div>
+
+  <!-- =====================
+       HEADER / NAVIGATION
+       ===================== -->
   <header class="sticky top-0 w-full z-50 glass border-b border-white/5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
+
       <!-- Logo -->
-      <a href="index.html" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"></path>
+      <a href="index.html" class="flex items-center gap-3 group" aria-label="ZeroWasteTable home">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300" aria-hidden="true">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
         </div>
         <span class="font-bold text-2xl tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent group-hover:text-white transition-colors">ZeroWasteTable</span>
       </a>
 
       <!-- Desktop Navigation Links -->
-      <nav class="hidden md:flex items-center gap-8">
-        <a href="#about" class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">About</a>
+      <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+        <a href="#about"        class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">About</a>
         <a href="#how-it-works" class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">How It Works</a>
-        <a href="#impact" class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">Our Impact</a>
-        <a href="#sdgs" class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">SDG Alignment</a>
+        <a href="#impact"       class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">Our Impact</a>
+        <a href="#live-map"     class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">Live Map</a>
+        <a href="#sdgs"         class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">SDG Alignment</a>
         <a href="#testimonials" class="text-sm font-medium text-gray-300 hover:text-ecoGreen transition-colors duration-200">Testimonials</a>
       </nav>
 
-      <!-- Action Button -->
-      <div class="hidden md:flex items-center gap-4">
+      <!-- Action Buttons + Dark Mode Toggle -->
+      <div class="hidden md:flex items-center gap-3">
+        <button id="dark-mode-toggle" aria-label="Switch to light mode">
+          <!-- Icon injected by JS -->
+        </button>
         <a href="auth/select-role.html" class="px-5 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
         <a href="auth/select-role.html" class="px-5 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-500/20 glow-pulse-green">Get Started</a>
       </div>
 
       <!-- Mobile menu trigger -->
-      <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white focus:outline-none">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </</button>
+      <div class="md:hidden flex items-center gap-2">
+        <button id="dark-mode-toggle" aria-label="Switch to light mode" class="p-2">
+          <!-- Icon injected by JS -->
+        </button>
+        <button id="mobile-menu-btn" class="p-2 text-gray-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-ecoGreen rounded-lg" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open navigation menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden md:hidden glass border-b border-white/5 px-4 py-6 space-y-4">
-      <a href="#about" class="block text-base font-medium text-gray-300 hover:text-ecoGreen">About</a>
-      <a href="#how-it-works" class="block text-base font-medium text-gray-300 hover:text-ecoGreen">How It Works</a>
-      <a href="#impact" class="block text-base font-medium text-gray-300 hover:text-ecoGreen">Our Impact</a>
-      <a href="#sdgs" class="block text-base font-medium text-gray-300 hover:text-ecoGreen">SDG Alignment</a>
-      <a href="auth/select-role.html" class="block w-full text-center px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
-      <a href="auth/select-role.html" class="block w-full text-center px-4 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg">Get Started</a>
+    <div id="mobile-menu" class="hidden md:hidden glass border-b border-white/5 px-4 py-6 space-y-4" role="menu">
+      <a href="#about"        class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">About</a>
+      <a href="#how-it-works" class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">How It Works</a>
+      <a href="#impact"       class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">Our Impact</a>
+      <a href="#live-map"     class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">Live Map</a>
+      <a href="#sdgs"         class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">SDG Alignment</a>
+      <a href="#testimonials" class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">Testimonials</a>
+      <div class="pt-2 flex flex-col gap-3">
+        <a href="auth/select-role.html" class="block w-full text-center px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
+        <a href="auth/select-role.html" class="block w-full text-center px-4 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg">Get Started</a>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="relative min-h-[90vh] flex items-center py-20 px-4 sm:px-6 lg:px-8">
-    <div id="hero-particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+  <!-- =====================
+       HERO SECTION
+       ===================== -->
+  <section class="relative min-h-[92vh] flex items-center py-24 px-4 sm:px-6 lg:px-8">
+    <div id="hero-particles" class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true"></div>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-      <!-- Hero Details -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
+      <!-- Hero Text -->
       <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-white/10 text-xs font-semibold tracking-wide text-ecoGreen shadow-inner animate-pulse">
-          <span class="w-2 h-2 rounded-full bg-ecoGreen"></span> AI-Powered Waste Prevention Platform
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-xs font-semibold tracking-wide text-ecoGreen shadow-inner">
+          <span class="w-2 h-2 rounded-full bg-ecoGreen hero-badge-dot" aria-hidden="true"></span>
+          AI-Powered Food Waste Prevention Platform
         </div>
-        <h1 class="text-4xl sm:text-6xl font-black leading-tight">
-          Connecting <span class="gradient-text-neon font-black">Excess Food</span><br>
+
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
+          Connecting
+          <span class="gradient-text-neon"> Excess Food</span><br>
           With Empty Plates.
         </h1>
+
         <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
-          ZeroWasteTable is a high-impact startup platform connecting supermarkets, restaurants, and hotels directly with local NGOs and volunteers. Seamlessly redistribute edible surplus, eliminate food waste, and save our climate.
+          ZeroWasteTable is a high-impact startup platform connecting supermarkets, restaurants, and hotels directly with local NGOs and volunteers — eliminating food waste while fighting hunger in real time.
         </p>
-        <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
-          <a href="auth/select-role.html" class="px-8 py-4 rounded-xl bg-ecoGreen text-white font-bold text-base hover:bg-emerald-600 shadow-xl shadow-emerald-500/10 hover:shadow-emerald-500/20 transform hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3">
+
+        <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
+          <a href="auth/select-role.html"
+             class="px-8 py-4 rounded-xl bg-ecoGreen text-white font-bold text-base hover:bg-emerald-600 shadow-xl shadow-emerald-500/10 hover:shadow-emerald-500/25 transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3">
             <span>List Surplus Food</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
           </a>
-          <a href="auth/select-role.html" class="px-8 py-4 rounded-xl glass border border-white/10 hover:bg-white/5 text-gray-200 font-bold text-base transform hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3">
+          <a href="auth/select-role.html"
+             class="px-8 py-4 rounded-xl glass border border-white/10 hover:bg-white/5 text-gray-200 font-bold text-base transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3">
+            <svg class="w-5 h-5 text-techBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
             <span>Join as NGO</span>
-            <svg class="w-5 h-5 text-techBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           </a>
         </div>
 
         <!-- Micro stats -->
-        <div class="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 max-w-md mx-auto lg:mx-0">
-          <div>
-            <div class="text-gray-500 text-xs">Active Donors</div>
-            <div class="font-bold text-xl text-gray-200">250+</div>
+        <div class="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 max-w-md mx-auto lg:mx-0" role="list" aria-label="Platform statistics">
+          <div role="listitem">
+            <div class="text-gray-500 text-xs mb-1">Active Donors</div>
+            <div class="font-black text-2xl text-gray-100">250+</div>
           </div>
-          <div>
-            <div class="text-gray-500 text-xs">Partner NGOs</div>
-            <div class="font-bold text-xl text-gray-200">140+</div>
+          <div role="listitem">
+            <div class="text-gray-500 text-xs mb-1">Partner NGOs</div>
+            <div class="font-black text-2xl text-gray-100">140+</div>
           </div>
-          <div>
-            <div class="text-gray-500 text-xs">Carbon Diverted</div>
-            <div class="font-bold text-xl text-gray-200">18.4t</div>
+          <div role="listitem">
+            <div class="text-gray-500 text-xs mb-1">Carbon Diverted</div>
+            <div class="font-black text-2xl text-gray-100">18.4t</div>
           </div>
         </div>
       </div>
 
       <!-- Hero Visuals (Cyber Dashboard Mockup) -->
-      <div class="lg:col-span-5 relative flex justify-center">
+      <div class="lg:col-span-5 relative flex justify-center" aria-hidden="true">
         <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden glass p-6 border border-white/10 flex flex-col justify-between shadow-2xl animate-float">
           <!-- Card Header decoration -->
           <div class="flex justify-between items-center">
@@ -137,28 +202,21 @@
 
           <!-- Dynamic Mock Radar Visualizer -->
           <div class="h-48 w-full relative flex items-center justify-center bg-cyberDark/50 rounded-2xl border border-white/5 my-4 overflow-hidden">
-            <!-- Pulsing Radar Circles -->
             <div class="absolute w-40 h-40 border border-ecoGreen/20 rounded-full animate-ping opacity-30"></div>
             <div class="absolute w-28 h-28 border border-techBlue/20 rounded-full animate-pulse opacity-40"></div>
             <div class="absolute w-12 h-12 border border-white/10 rounded-full"></div>
-            <!-- Grid Lines -->
             <div class="absolute inset-y-0 left-1/2 w-px bg-white/5"></div>
             <div class="absolute inset-x-0 top-1/2 h-px bg-white/5"></div>
-            <!-- Radar sweep line -->
-            <div class="absolute w-full h-full bg-gradient-to-tr from-ecoGreen/10 to-transparent rotate-45 transform origin-center animate-spin" style="animation-duration: 6s;"></div>
-
-            <!-- Pulsing Pins -->
-            <div class="absolute top-1/4 left-1/3 w-3 h-3 bg-ecoGreen rounded-full glow-pulse-green" title="Grand Palace Hotel"></div>
-            <div class="absolute bottom-1/3 right-1/4 w-3 h-3 bg-techBlue rounded-full glow-pulse-blue" title="Helping Hands NGO"></div>
-            <div class="absolute top-1/2 right-1/3 w-2 h-2 bg-yellow-500 rounded-full" title="Active Courier in Transit"></div>
+            <div class="absolute w-full h-full bg-gradient-to-tr from-ecoGreen/10 to-transparent transform origin-center animate-spin" style="animation-duration: 6s;"></div>
+            <div class="absolute top-1/4 left-1/3 w-3 h-3 bg-ecoGreen rounded-full glow-pulse-green"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-3 h-3 bg-techBlue rounded-full glow-pulse-blue"></div>
+            <div class="absolute top-1/2 right-1/3 w-2 h-2 bg-yellow-500 rounded-full"></div>
           </div>
 
           <!-- Mini Listing Card -->
           <div class="bg-white/5 border border-white/10 rounded-xl p-3.5 flex items-center justify-between text-left">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-ecoGreen/10 flex items-center justify-center text-ecoGreen font-bold text-xs">
-                50 kg
-              </div>
+              <div class="w-10 h-10 rounded-lg bg-ecoGreen/10 flex items-center justify-center text-ecoGreen font-bold text-xs">50 kg</div>
               <div>
                 <h4 class="text-sm font-semibold text-gray-200">Fresh Bakery Packs</h4>
                 <p class="text-[10px] text-gray-400">Greenwood Gourmet Supermarket</p>
@@ -174,64 +232,66 @@
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- =====================
+       ABOUT SECTION
+       ===================== -->
   <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 relative">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="reveal-left">
         <h2 class="text-xs font-bold text-ecoGreen uppercase tracking-widest mb-3">Our Core Mandate</h2>
         <h3 class="text-3xl sm:text-4xl font-bold leading-tight mb-6">
-          A Purpose-Driven Ecosystem Mitigating Hunger & Eco-Damage.
+          A Purpose-Driven Ecosystem Mitigating Hunger &amp; Eco-Damage.
         </h3>
         <p class="text-gray-400 mb-6 leading-relaxed font-light">
-          Global food waste accounts for approximately 8% to 10% of worldwide greenhouse gas emissions. Millions of tons of nutritious, edible surplus food are thrown away daily by food merchants and hospitality hubs while millions of local citizens suffer from food insecurity. 
+          Global food waste accounts for approximately 8–10% of worldwide greenhouse gas emissions. Millions of tons of nutritious, edible surplus food are discarded daily by food merchants and hospitality hubs while millions suffer from food insecurity.
         </p>
         <p class="text-gray-400 mb-8 leading-relaxed font-light">
           ZeroWasteTable leverages real-time digital matchmaking, predictive logistics maps, and visual dashboard analytics to orchestrate instant handoffs from food hubs to community soup kitchens and distribution groups.
         </p>
-        
+
         <!-- SDG highlights -->
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-3">
           <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-950/20 border border-amber-800/30 text-amber-300 text-xs font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> UN SDG 2: Zero Hunger
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true"></span> UN SDG 2: Zero Hunger
           </div>
           <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-950/20 border border-emerald-800/30 text-emerald-300 text-xs font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> UN SDG 12: Responsible Consumption
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true"></span> UN SDG 12: Responsible Consumption
           </div>
           <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-950/20 border border-blue-800/30 text-blue-300 text-xs font-semibold">
-            <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> UN SDG 13: Climate Action
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-400" aria-hidden="true"></span> UN SDG 13: Climate Action
           </div>
         </div>
       </div>
 
-      <!-- Feature grid representation -->
+      <!-- Feature grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 reveal-right">
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <div class="w-12 h-12 rounded-xl bg-ecoGreen/10 flex items-center justify-center text-ecoGreen">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-ecoGreen/10 flex items-center justify-center text-ecoGreen" aria-hidden="true">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </div>
           <h4 class="text-lg font-bold text-gray-200">Real-Time Alerts</h4>
-          <p class="text-sm text-gray-400 leading-relaxed font-light">NGOs are instantly alerted through notification protocols the moment local restaurants create surplus listings.</p>
+          <p class="text-sm text-gray-400 leading-relaxed font-light">NGOs are instantly alerted the moment local restaurants create surplus listings.</p>
         </div>
 
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <div class="w-12 h-12 rounded-xl bg-techBlue/10 flex items-center justify-center text-techBlue">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-techBlue/10 flex items-center justify-center text-techBlue" aria-hidden="true">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
           </div>
           <h4 class="text-lg font-bold text-gray-200">Smart Mapping</h4>
-          <p class="text-sm text-gray-400 leading-relaxed font-light">Route optimization systems and location pins enable volunteers to pick up donations quickly without cold-chain lapses.</p>
+          <p class="text-sm text-gray-400 leading-relaxed font-light">Route optimization and live location pins let volunteers pick up donations without cold-chain lapses.</p>
         </div>
 
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400" aria-hidden="true">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           </div>
           <h4 class="text-lg font-bold text-gray-200">Impact Metrics</h4>
-          <p class="text-sm text-gray-400 leading-relaxed font-light">Automated calculators display active indicators of meals served, weight saved, and total carbon footprints prevented.</p>
+          <p class="text-sm text-gray-400 leading-relaxed font-light">Automated calculators display meals served, weight saved, and carbon footprints prevented in real time.</p>
         </div>
 
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-400">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4">
+          <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-400" aria-hidden="true">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
           </div>
           <h4 class="text-lg font-bold text-gray-200">FSSAI Compliant</h4>
           <p class="text-sm text-gray-400 leading-relaxed font-light">Comprehensive food safety verification keeps donation networks legally insulated and operationally sound.</p>
@@ -240,56 +300,60 @@
     </div>
   </section>
 
-  <!-- How It Works Section -->
+  <!-- =====================
+       HOW IT WORKS
+       ===================== -->
   <section id="how-it-works" class="py-24 px-4 sm:px-6 lg:px-8 bg-cyberCard/30 relative">
     <div class="max-w-7xl mx-auto text-center">
       <div class="reveal max-w-3xl mx-auto mb-16">
         <h2 class="text-xs font-bold text-ecoGreen uppercase tracking-widest mb-3">Seamless Distribution Workflow</h2>
         <h3 class="text-3xl sm:text-4xl font-bold leading-tight">3 Simple Steps to Feed the Vulnerable</h3>
-        <p class="text-gray-400 mt-4 leading-relaxed font-light">Eliminating friction from the excess food redistribution chain through optimized instant alerts.</p>
+        <p class="text-gray-400 mt-4 leading-relaxed font-light">Eliminating friction from the excess food redistribution chain through optimised instant alerts.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-        <!-- Connecting Line for timeline -->
-        <div class="hidden md:block absolute top-1/3 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-ecoGreen/30 via-techBlue/30 to-ecoGreen/30 -z-10"></div>
+        <!-- Connecting Line -->
+        <div class="hidden md:block absolute top-1/3 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-ecoGreen/30 via-techBlue/30 to-ecoGreen/30 -z-10" aria-hidden="true"></div>
 
         <!-- Step 1 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 relative bg-cyberCard reveal" style="transition-delay: 0.1s;">
-          <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-ecoGreen text-cyberDark flex items-center justify-center font-bold text-lg shadow-lg">1</div>
-          <div class="w-16 h-16 rounded-2xl bg-ecoGreen/10 flex items-center justify-center text-ecoGreen mx-auto mb-6 mt-2">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 relative bg-cyberCard reveal" style="transition-delay: 0.1s;">
+          <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-ecoGreen text-cyberDark flex items-center justify-center font-bold text-lg shadow-lg" aria-label="Step 1">1</div>
+          <div class="w-16 h-16 rounded-2xl bg-ecoGreen/10 flex items-center justify-center text-ecoGreen mx-auto mb-6 mt-2" aria-hidden="true">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
           <h4 class="text-xl font-bold text-gray-200 mb-3">Restaurant Lists Surplus</h4>
-          <p class="text-sm text-gray-400 leading-relaxed font-light">Food entities specify quantity, food type (veg, vegan, non-veg), allergens, and strict pickup expiry deadlines.</p>
+          <p class="text-sm text-gray-400 leading-relaxed font-light">Food entities specify quantity, food type, allergens, and strict pickup expiry deadlines in seconds.</p>
         </div>
 
         <!-- Step 2 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 relative bg-cyberCard reveal" style="transition-delay: 0.3s;">
-          <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-techBlue text-cyberDark flex items-center justify-center font-bold text-lg shadow-lg">2</div>
-          <div class="w-16 h-16 rounded-2xl bg-techBlue/10 flex items-center justify-center text-techBlue mx-auto mb-6 mt-2">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 relative bg-cyberCard reveal" style="transition-delay: 0.3s;">
+          <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-techBlue text-cyberDark flex items-center justify-center font-bold text-lg shadow-lg" aria-label="Step 2">2</div>
+          <div class="w-16 h-16 rounded-2xl bg-techBlue/10 flex items-center justify-center text-techBlue mx-auto mb-6 mt-2" aria-hidden="true">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
           </div>
-          <h4 class="text-xl font-bold text-gray-200 mb-3">NGO Accepts & Dispatches</h4>
+          <h4 class="text-xl font-bold text-gray-200 mb-3">NGO Accepts &amp; Dispatches</h4>
           <p class="text-sm text-gray-400 leading-relaxed font-light">Local certified NGOs match demands, accept listings, and send volunteer couriers for instant dispatch.</p>
         </div>
 
         <!-- Step 3 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 relative bg-cyberCard reveal" style="transition-delay: 0.5s;">
-          <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-ecoGreen text-cyberDark flex items-center justify-center font-bold text-lg shadow-lg">3</div>
-          <div class="w-16 h-16 rounded-2xl bg-ecoGreen/10 flex items-center justify-center text-ecoGreen mx-auto mb-6 mt-2">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 relative bg-cyberCard reveal" style="transition-delay: 0.5s;">
+          <div class="absolute -top-5 left-1/2 transform -translate-x-1/2 w-10 h-10 rounded-full bg-ecoGreen text-cyberDark flex items-center justify-center font-bold text-lg shadow-lg" aria-label="Step 3">3</div>
+          <div class="w-16 h-16 rounded-2xl bg-ecoGreen/10 flex items-center justify-center text-ecoGreen mx-auto mb-6 mt-2" aria-hidden="true">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
           <h4 class="text-xl font-bold text-gray-200 mb-3">Food Safely Delivered</h4>
-          <p class="text-sm text-gray-400 leading-relaxed font-light">Redirection completed successfully. Dynamic logs update stats like carbon offset and meal indicators in real time.</p>
+          <p class="text-sm text-gray-400 leading-relaxed font-light">Redirection completed. Dynamic logs update stats like carbon offset and meal indicators in real time.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Live Impact Section -->
+  <!-- =====================
+       LIVE IMPACT COUNTERS
+       ===================== -->
   <section id="impact" class="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 relative overflow-hidden">
-    <div class="absolute -bottom-20 right-1/4 w-[400px] h-[400px] bg-radial-gradient-green opacity-40 pointer-events-none -z-10"></div>
-    
+    <div class="absolute -bottom-20 right-1/4 w-[400px] h-[400px] bg-radial-gradient-green opacity-40 pointer-events-none -z-10" aria-hidden="true"></div>
+
     <div class="max-w-7xl mx-auto">
       <div class="reveal text-center max-w-2xl mx-auto mb-16">
         <h2 class="text-xs font-bold text-ecoGreen uppercase tracking-widest mb-3">Live Impact Metrics</h2>
@@ -297,34 +361,30 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Impact 1 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
-          <div class="absolute -inset-px bg-gradient-to-tr from-ecoGreen/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10"></div>
-          <div class="text-4xl sm:text-5xl font-black text-white glow-text-green font-mono" data-counter-target="76540" data-counter-suffix="+">0</div>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
+          <div class="absolute -inset-px bg-gradient-to-tr from-ecoGreen/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10" aria-hidden="true"></div>
+          <div class="text-4xl sm:text-5xl font-black text-white glow-text-green font-mono" data-counter-target="76540" data-counter-suffix="+" aria-label="76,540+ meals served">0</div>
           <div class="text-sm font-semibold text-gray-200">Meals Served</div>
           <p class="text-xs text-gray-500 font-light">Fresh quality surplus redistributed to food banks.</p>
         </div>
 
-        <!-- Impact 2 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
-          <div class="absolute -inset-px bg-gradient-to-tr from-techBlue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10"></div>
-          <div class="text-4xl sm:text-5xl font-black text-white glow-text-blue font-mono" data-counter-target="38270" data-counter-suffix=" kg">0</div>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
+          <div class="absolute -inset-px bg-gradient-to-tr from-techBlue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10" aria-hidden="true"></div>
+          <div class="text-4xl sm:text-5xl font-black text-white glow-text-blue font-mono" data-counter-target="38270" data-counter-suffix=" kg" aria-label="38,270 kg food diverted">0</div>
           <div class="text-sm font-semibold text-gray-200">Food Waste Diverted</div>
           <p class="text-xs text-gray-500 font-light">Redistributed edible bulk saved from landfill rot.</p>
         </div>
 
-        <!-- Impact 3 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
-          <div class="absolute -inset-px bg-gradient-to-tr from-ecoGreen/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10"></div>
-          <div class="text-4xl sm:text-5xl font-black text-white glow-text-green font-mono" data-counter-target="95675" data-counter-suffix=" kg">0</div>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
+          <div class="absolute -inset-px bg-gradient-to-tr from-ecoGreen/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10" aria-hidden="true"></div>
+          <div class="text-4xl sm:text-5xl font-black text-white glow-text-green font-mono" data-counter-target="95675" data-counter-suffix=" kg" aria-label="95,675 kg CO2 reduced">0</div>
           <div class="text-sm font-semibold text-gray-200">CO₂ Emissions Reduced</div>
           <p class="text-xs text-gray-500 font-light">Greenhouse gas output offset from landfills.</p>
         </div>
 
-        <!-- Impact 4 -->
-        <div class="glass p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
-          <div class="absolute -inset-px bg-gradient-to-tr from-techBlue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10"></div>
-          <div class="text-4xl sm:text-5xl font-black text-white glow-text-blue font-mono" data-counter-target="390" data-counter-suffix="+">0</div>
+        <div class="glass glass-interactive p-8 rounded-2xl border border-white/5 text-center space-y-3 relative group overflow-hidden">
+          <div class="absolute -inset-px bg-gradient-to-tr from-techBlue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl -z-10" aria-hidden="true"></div>
+          <div class="text-4xl sm:text-5xl font-black text-white glow-text-blue font-mono" data-counter-target="390" data-counter-suffix="+" aria-label="390+ affiliated partners">0</div>
           <div class="text-sm font-semibold text-gray-200">Affiliated Partners</div>
           <p class="text-xs text-gray-500 font-light">Collaborating food providers and volunteer units.</p>
         </div>
@@ -332,47 +392,73 @@
     </div>
   </section>
 
-  <!-- SDG Support Cards -->
-  <section id="sdgs" class="py-24 px-4 sm:px-6 lg:px-8 bg-cyberCard/20 border-t border-white/5 relative">
+  <!-- =====================
+       LIVE DONATION MAP
+       ===================== -->
+  <section id="live-map" class="py-24 px-4 sm:px-6 lg:px-8 bg-cyberCard/20 border-t border-white/5 relative">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-xs font-bold text-ecoGreen uppercase tracking-widest mb-3">Live Donation Network</h2>
+        <h3 class="text-3xl sm:text-4xl font-bold">Real-Time Pickup Map</h3>
+        <p class="text-gray-400 mt-4 leading-relaxed font-light">
+          Track active food surplus listings and nearby NGO pickup points across your city in real time.
+        </p>
+      </div>
+
+      <!-- Map Legend -->
+      <div class="flex flex-wrap justify-center gap-6 mb-6 reveal">
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <span class="w-3 h-3 rounded-full bg-ecoGreen inline-block shadow-lg shadow-ecoGreen/40" aria-hidden="true"></span>
+          Food Donor (Restaurant / Hotel)
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <span class="w-3 h-3 rounded-full bg-techBlue inline-block shadow-lg shadow-techBlue/40" aria-hidden="true"></span>
+          NGO / Relief Center
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block" aria-hidden="true"></span>
+          Courier in Transit
+        </div>
+      </div>
+
+      <!-- Leaflet Map -->
+      <div id="map" class="reveal" role="application" aria-label="Interactive live donation map showing restaurants and NGOs"></div>
+
+      <p class="text-center text-xs text-gray-600 mt-4 font-mono">Demo markers shown. Live data integrates via your backend API.</p>
+    </div>
+  </section>
+
+  <!-- =====================
+       SDG SUPPORT CARDS
+       ===================== -->
+  <section id="sdgs" class="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 relative">
     <div class="max-w-7xl mx-auto">
       <div class="reveal text-center max-w-2xl mx-auto mb-16">
         <h2 class="text-xs font-bold text-ecoGreen uppercase tracking-widest mb-3">Sustainable Development Goals</h2>
         <h3 class="text-3xl sm:text-4xl font-bold">Allying with United Nations Targets</h3>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- SDG 2 -->
-        <div class="glass p-6 rounded-2xl border border-amber-500/20 bg-amber-950/5 hover:-translate-y-2 transition-transform duration-300">
-          <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-amber-500/20">
-            2
-          </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="glass p-6 rounded-2xl border border-amber-500/20 bg-amber-950/5 hover:-translate-y-2 transition-transform duration-300 reveal" style="transition-delay:0.1s;">
+          <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-amber-500/20" aria-label="SDG 2">2</div>
           <h4 class="text-lg font-bold text-amber-200 mb-2">Zero Hunger</h4>
           <p class="text-xs text-gray-400 leading-relaxed font-light">Direct distribution pipelines from local restaurants to street kitchen networks prevent food distress locally.</p>
         </div>
 
-        <!-- SDG 11 -->
-        <div class="glass p-6 rounded-2xl border border-orange-500/20 bg-orange-950/5 hover:-translate-y-2 transition-transform duration-300">
-          <div class="w-12 h-12 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-orange-500/20">
-            11
-          </div>
+        <div class="glass p-6 rounded-2xl border border-orange-500/20 bg-orange-950/5 hover:-translate-y-2 transition-transform duration-300 reveal" style="transition-delay:0.2s;">
+          <div class="w-12 h-12 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-orange-500/20" aria-label="SDG 11">11</div>
           <h4 class="text-lg font-bold text-orange-200 mb-2">Sustainable Communities</h4>
           <p class="text-xs text-gray-400 leading-relaxed font-light">Fosters grassroots volunteer ecosystems and local food redistribution chains in sustainable municipalities.</p>
         </div>
 
-        <!-- SDG 12 -->
-        <div class="glass p-6 rounded-2xl border border-emerald-500/20 bg-emerald-950/5 hover:-translate-y-2 transition-transform duration-300">
-          <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-emerald-500/20">
-            12
-          </div>
+        <div class="glass p-6 rounded-2xl border border-emerald-500/20 bg-emerald-950/5 hover:-translate-y-2 transition-transform duration-300 reveal" style="transition-delay:0.3s;">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-emerald-500/20" aria-label="SDG 12">12</div>
           <h4 class="text-lg font-bold text-emerald-200 mb-2">Responsible Consumption</h4>
-          <p class="text-xs text-gray-400 leading-relaxed font-light">Eliminates source food waste, optimizing business surplus consumption through detailed data charts.</p>
+          <p class="text-xs text-gray-400 leading-relaxed font-light">Eliminates source food waste, optimising business surplus consumption through detailed data charts.</p>
         </div>
 
-        <!-- SDG 13 -->
-        <div class="glass p-6 rounded-2xl border border-blue-500/20 bg-blue-950/5 hover:-translate-y-2 transition-transform duration-300">
-          <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-blue-500/20">
-            13
-          </div>
+        <div class="glass p-6 rounded-2xl border border-blue-500/20 bg-blue-950/5 hover:-translate-y-2 transition-transform duration-300 reveal" style="transition-delay:0.4s;">
+          <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center text-white font-bold text-xl mb-6 shadow-lg shadow-blue-500/20" aria-label="SDG 13">13</div>
           <h4 class="text-lg font-bold text-blue-200 mb-2">Climate Action</h4>
           <p class="text-xs text-gray-400 leading-relaxed font-light">Curtails organic landfill garbage accumulation, preventing volatile methane gas releases directly.</p>
         </div>
@@ -380,7 +466,9 @@
     </div>
   </section>
 
-  <!-- Collaboration Section (Restaurant & NGO Collaboration) -->
+  <!-- =====================
+       COLLABORATION SECTION
+       ===================== -->
   <section class="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 relative">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -392,27 +480,34 @@
           </p>
           <div class="space-y-4 pt-4">
             <div class="flex gap-4">
-              <div class="w-6 h-6 rounded-full bg-ecoGreen/20 flex items-center justify-center text-ecoGreen flex-shrink-0 mt-0.5">✔</div>
+              <div class="w-6 h-6 rounded-full bg-ecoGreen/20 flex items-center justify-center text-ecoGreen flex-shrink-0 mt-0.5" aria-hidden="true">✔</div>
               <div>
                 <h5 class="font-semibold text-gray-200">FSSAI Compliance Verification</h5>
                 <p class="text-xs text-gray-400 font-light">Ensures food safety standards and accountability for surplus handoffs.</p>
               </div>
             </div>
             <div class="flex gap-4">
-              <div class="w-6 h-6 rounded-full bg-techBlue/20 flex items-center justify-center text-techBlue flex-shrink-0 mt-0.5">✔</div>
+              <div class="w-6 h-6 rounded-full bg-techBlue/20 flex items-center justify-center text-techBlue flex-shrink-0 mt-0.5" aria-hidden="true">✔</div>
               <div>
                 <h5 class="font-semibold text-gray-200">Live Delivery ETA Radar</h5>
                 <p class="text-xs text-gray-400 font-light">Dynamic volunteer coordinates show pickup logistics statuses on active maps.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 flex-shrink-0 mt-0.5" aria-hidden="true">✔</div>
+              <div>
+                <h5 class="font-semibold text-gray-200">AI Route Optimisation</h5>
+                <p class="text-xs text-gray-400 font-light">Machine learning minimises volunteer travel time and maximises food freshness on delivery.</p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 reveal-right">
-          <!-- Restaurant Card Preview -->
-          <div class="glass p-6 rounded-2xl border-l-4 border-l-ecoGreen relative overflow-hidden">
-            <div class="absolute top-2 right-2 text-ecoGreen/10 font-bold text-6xl select-none">01</div>
-            <h4 class="text-lg font-bold text-ecoGreen mb-2">For Food Providers</h4>
+          <!-- Restaurant Card -->
+          <div class="glass glass-interactive p-6 rounded-2xl border-l-4 border-l-ecoGreen relative overflow-hidden">
+            <div class="absolute top-2 right-2 text-ecoGreen/10 font-bold text-6xl select-none" aria-hidden="true">01</div>
+            <h4 class="text-lg font-bold text-ecoGreen mb-3">For Food Providers</h4>
             <ul class="text-xs text-gray-400 space-y-2 list-disc pl-4 font-light">
               <li>Supermarket bulk transfers</li>
               <li>Hotel catering leftovers</li>
@@ -420,15 +515,16 @@
               <li>Automated tax-break sheets</li>
               <li>Public green badges</li>
             </ul>
-            <a href="auth/select-role.html" class="inline-block mt-6 text-xs text-ecoGreen hover:underline font-bold flex items-center gap-2">
-              <span>Register Food Entity</span> →
+            <a href="auth/select-role.html" class="inline-flex items-center gap-2 mt-6 text-xs text-ecoGreen hover:underline font-bold">
+              <span>Register Food Entity</span>
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
           </div>
 
-          <!-- NGO Card Preview -->
-          <div class="glass p-6 rounded-2xl border-l-4 border-l-techBlue relative overflow-hidden">
-            <div class="absolute top-2 right-2 text-techBlue/10 font-bold text-6xl select-none">02</div>
-            <h4 class="text-lg font-bold text-techBlue mb-2">For Relievers & NGOs</h4>
+          <!-- NGO Card -->
+          <div class="glass glass-interactive p-6 rounded-2xl border-l-4 border-l-techBlue relative overflow-hidden">
+            <div class="absolute top-2 right-2 text-techBlue/10 font-bold text-6xl select-none" aria-hidden="true">02</div>
+            <h4 class="text-lg font-bold text-techBlue mb-3">For Relievers &amp; NGOs</h4>
             <ul class="text-xs text-gray-400 space-y-2 list-disc pl-4 font-light">
               <li>Verified feeding networks</li>
               <li>Local distribution centers</li>
@@ -436,8 +532,9 @@
               <li>Auto load-capacity tracker</li>
               <li>Impact reporting data</li>
             </ul>
-            <a href="auth/select-role.html" class="inline-block mt-6 text-xs text-techBlue hover:underline font-bold flex items-center gap-2">
-              <span>Register NGO Network</span> →
+            <a href="auth/select-role.html" class="inline-flex items-center gap-2 mt-6 text-xs text-techBlue hover:underline font-bold">
+              <span>Register NGO Network</span>
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
           </div>
         </div>
@@ -445,7 +542,9 @@
     </div>
   </section>
 
-  <!-- Testimonials Section -->
+  <!-- =====================
+       TESTIMONIALS
+       ===================== -->
   <section id="testimonials" class="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 bg-cyberCard/10 relative">
     <div class="max-w-7xl mx-auto">
       <div class="reveal text-center max-w-2xl mx-auto mb-16">
@@ -454,38 +553,57 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Testimonial 1 -->
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <p class="text-sm text-gray-300 italic font-light">"Redistributing surplus food was always an administrative nightmare. ZeroWasteTable streamlined everything. A kitchen listing takes 30 seconds, and local volunteers pick it up within the hour."</p>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4 reveal" style="transition-delay:0.1s;">
+          <!-- Stars -->
+          <div class="flex gap-1" aria-label="5 out of 5 stars">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm text-gray-300 italic font-light leading-relaxed">"Redistributing surplus food was always an administrative nightmare. ZeroWasteTable streamlined everything — a kitchen listing takes 30 seconds, and volunteers pick it up within the hour."</p>
           <div class="flex items-center gap-3 pt-2">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center font-bold text-white text-xs">SG</div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center font-bold text-white text-xs" aria-hidden="true">SG</div>
             <div>
               <h4 class="text-sm font-bold text-gray-200">Chef Sandeep Gupta</h4>
-              <p class="text-[10px] text-gray-500 font-mono">EXECUTIVE CHEF, GRAND ROYAL</p>
+              <p class="text-[10px] text-gray-500 font-mono uppercase tracking-wide">Executive Chef, Grand Royal</p>
             </div>
           </div>
         </div>
 
-        <!-- Testimonial 2 -->
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <p class="text-sm text-gray-300 italic font-light">"Our shelter feeds over 300 individuals every evening. ZeroWasteTable's live map coordinates connect us with premium nearby fresh bakeries, improving community health metrics significantly."</p>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4 reveal" style="transition-delay:0.25s;">
+          <div class="flex gap-1" aria-label="5 out of 5 stars">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm text-gray-300 italic font-light leading-relaxed">"Our shelter feeds over 300 individuals every evening. ZeroWasteTable's live map connects us with premium nearby bakeries, improving community health metrics significantly."</p>
           <div class="flex items-center gap-3 pt-2">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-techBlue to-ecoGreen flex items-center justify-center font-bold text-white text-xs">AN</div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-techBlue to-ecoGreen flex items-center justify-center font-bold text-white text-xs" aria-hidden="true">AN</div>
             <div>
               <h4 class="text-sm font-bold text-gray-200">Aparna Nair</h4>
-              <p class="text-[10px] text-gray-500 font-mono">DIRECTOR, FEEDING HOPE</p>
+              <p class="text-[10px] text-gray-500 font-mono uppercase tracking-wide">Director, Feeding Hope NGO</p>
             </div>
           </div>
         </div>
 
-        <!-- Testimonial 3 -->
-        <div class="glass p-6 rounded-2xl border border-white/5 space-y-4">
-          <p class="text-sm text-gray-300 italic font-light">"The emissions reporting tools on ZeroWasteTable have completely transformed our sustainability dashboard reviews. We've officially proven over 3 tons of carbon reduction to our board."</p>
+        <div class="glass glass-interactive p-6 rounded-2xl border border-white/5 space-y-4 reveal" style="transition-delay:0.4s;">
+          <div class="flex gap-1" aria-label="5 out of 5 stars">
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm text-gray-300 italic font-light leading-relaxed">"The emissions reporting tools have completely transformed our sustainability dashboard. We've proven over 3 tons of carbon reduction to our board using ZeroWasteTable's data."</p>
           <div class="flex items-center gap-3 pt-2">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center font-bold text-white text-xs">RM</div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center font-bold text-white text-xs" aria-hidden="true">RM</div>
             <div>
               <h4 class="text-sm font-bold text-gray-200">Rajesh Mehta</h4>
-              <p class="text-[10px] text-gray-500 font-mono">CSR HEAD, URBAN GROCERS</p>
+              <p class="text-[10px] text-gray-500 font-mono uppercase tracking-wide">CSR Head, Urban Grocers</p>
             </div>
           </div>
         </div>
@@ -493,31 +611,38 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
+  <!-- =====================
+       CONTACT SECTION
+       ===================== -->
   <section class="py-24 px-4 sm:px-6 lg:px-8 border-t border-white/5 relative">
     <div class="max-w-3xl mx-auto glass p-8 sm:p-12 rounded-3xl border border-white/10 relative overflow-hidden">
-      <div class="absolute -top-10 -right-10 w-40 h-40 bg-ecoGreen/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -top-10 -right-10 w-40 h-40 bg-ecoGreen/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
 
       <div class="text-center space-y-4 mb-8">
         <h3 class="text-3xl font-bold text-gray-100">Establish a Connection</h3>
         <p class="text-sm text-gray-400 leading-relaxed font-light">Want to register your commercial kitchen, wholesale grocery franchise, or regional NGO? Send a request to our integration squad.</p>
       </div>
 
-      <form class="space-y-6" onsubmit="event.preventDefault(); alert('Request submitted successfully! Our integration coordinator will reach out shortly.');">
+      <form id="contact-form" class="space-y-6" novalidate>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="space-y-2">
-            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Your Name</label>
-            <input type="text" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-green" placeholder="John Doe">
+            <label for="contact-name" class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Your Name</label>
+            <input id="contact-name" type="text" name="name" required
+              class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-green"
+              placeholder="John Doe" autocomplete="name">
           </div>
           <div class="space-y-2">
-            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Address</label>
-            <input type="email" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-green" placeholder="john@example.com">
+            <label for="contact-email" class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Address</label>
+            <input id="contact-email" type="email" name="email" required
+              class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-green"
+              placeholder="john@example.com" autocomplete="email">
           </div>
         </div>
 
         <div class="space-y-2">
-          <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Entity Type</label>
-          <select class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-ecoGreen">
+          <label for="contact-entity" class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Entity Type</label>
+          <select id="contact-entity" name="entity"
+            class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-ecoGreen">
             <option value="restaurant">Restaurant / Caterer / Hotel</option>
             <option value="supermarket">Supermarket / Grocery Vendor</option>
             <option value="ngo">NGO / Relief Foundation</option>
@@ -526,41 +651,229 @@
         </div>
 
         <div class="space-y-2">
-          <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Message Description</label>
-          <textarea rows="4" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-green" placeholder="Briefly describe your logistics capacity, average food surplus types, or local distribution reach."></textarea>
+          <label for="contact-message" class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Message</label>
+          <textarea id="contact-message" name="message" rows="4" required
+            class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-green"
+            placeholder="Briefly describe your logistics capacity, average food surplus types, or local distribution reach."></textarea>
         </div>
 
-        <button type="submit" class="w-full py-4 rounded-xl bg-ecoGreen text-white font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg shadow-ecoGreen/20">Send Integration Proposal</button>
+        <button type="submit"
+          class="w-full py-4 rounded-xl bg-ecoGreen text-white font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg shadow-ecoGreen/20 hover:shadow-ecoGreen/30 transform hover:-translate-y-0.5">
+          Send Integration Proposal
+        </button>
       </form>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-cyberDark border-t border-white/5 py-12 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center shadow-lg">
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          </svg>
+  <!-- =====================
+       FOOTER
+       ===================== -->
+  <footer class="bg-cyberDark border-t border-white/5 pt-16 pb-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Footer Top Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/5">
+
+        <!-- Brand Column -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center shadow-lg" aria-hidden="true">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <span class="font-bold text-lg text-gray-200">ZeroWasteTable</span>
+          </div>
+          <p class="text-xs text-gray-500 leading-relaxed font-light">
+            Turning food surplus into social good — one pickup at a time. Powered by AI, driven by compassion.
+          </p>
+          <!-- Social Links -->
+          <div class="flex gap-3 pt-2">
+            <a href="#" class="footer-social-link" aria-label="GitHub">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="LinkedIn">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" aria-label="Twitter / X">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
         </div>
-        <span class="font-bold text-lg text-gray-200">ZeroWasteTable</span>
+
+        <!-- Platform Column -->
+        <div class="space-y-4">
+          <h4 class="text-sm font-bold text-gray-200 uppercase tracking-widest">Platform</h4>
+          <ul class="space-y-3">
+            <li><a href="#how-it-works" class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">How It Works</a></li>
+            <li><a href="#impact"        class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">Live Impact</a></li>
+            <li><a href="#live-map"      class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">Donation Map</a></li>
+            <li><a href="#sdgs"          class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">SDG Alignment</a></li>
+            <li><a href="#testimonials"  class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">Testimonials</a></li>
+          </ul>
+        </div>
+
+        <!-- For Partners Column -->
+        <div class="space-y-4">
+          <h4 class="text-sm font-bold text-gray-200 uppercase tracking-widest">For Partners</h4>
+          <ul class="space-y-3">
+            <li><a href="auth/select-role.html" class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">Restaurant Signup</a></li>
+            <li><a href="auth/select-role.html" class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">NGO Registration</a></li>
+            <li><a href="auth/select-role.html" class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">Volunteer Portal</a></li>
+            <li><a href="#"                      class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">API Documentation</a></li>
+            <li><a href="#"                      class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">FSSAI Compliance Guide</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Column -->
+        <div class="space-y-4">
+          <h4 class="text-sm font-bold text-gray-200 uppercase tracking-widest">Get In Touch</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-ecoGreen mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <a href="mailto:hello@zerowastetable.org" class="text-xs text-gray-500 hover:text-ecoGreen transition-colors font-light">hello@zerowastetable.org</a>
+            </li>
+            <li class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-ecoGreen mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <span class="text-xs text-gray-500 font-light">Mumbai, India</span>
+            </li>
+          </ul>
+          <a href="#contact-form"
+             class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-ecoGreen/10 border border-ecoGreen/20 text-xs text-ecoGreen font-semibold hover:bg-ecoGreen/20 transition-all">
+            Send a Message →
+          </a>
+        </div>
       </div>
 
-      <div class="text-xs text-gray-500">
-        © 2026 ZeroWasteTable. Fostering SDG #2, #11, #12 & #13. All rights reserved.
-      </div>
-
-      <div class="flex gap-4">
-        <a href="#" class="text-gray-400 hover:text-white transition-colors text-xs">Privacy Policy</a>
-        <a href="#" class="text-gray-400 hover:text-white transition-colors text-xs">Terms of Service</a>
-        <a href="#" class="text-gray-400 hover:text-white transition-colors text-xs">API Documentation</a>
+      <!-- Footer Bottom -->
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8">
+        <p class="text-xs text-gray-600">
+          © 2026 ZeroWasteTable. Advancing UN SDG #2, #11, #12 &amp; #13. All rights reserved.
+        </p>
+        <div class="flex gap-5">
+          <a href="#" class="text-xs text-gray-600 hover:text-gray-400 transition-colors">Privacy Policy</a>
+          <a href="#" class="text-xs text-gray-600 hover:text-gray-400 transition-colors">Terms of Service</a>
+          <a href="#" class="text-xs text-gray-600 hover:text-gray-400 transition-colors">Cookie Policy</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- Core JavaScript Libraries -->
+  <!-- =====================
+       AI CHATBOT WIDGET
+       ===================== -->
+  <div id="ai-chatbot-container">
+    <button class="chatbot-toggle-btn" onclick="toggleChatbot()" aria-label="Open AI Assistant">
+      <i data-lucide="message-square" class="w-6 h-6"></i>
+    </button>
+    <div id="chatbot-window" class="chatbot-window">
+      <div class="chatbot-header">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+          <span class="font-bold text-sm text-gray-200">ZeroWaste AI Assistant</span>
+        </div>
+        <button onclick="toggleChatbot()" class="text-gray-400 hover:text-white" aria-label="Close Chat">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div id="chatbot-messages" class="chatbot-messages">
+        <div class="chat-msg bot">
+          Hello! I am your ZeroWaste AI Assistant. Ask me anything about food donation, NGO collections, route optimization, or FSSAI compliance!
+        </div>
+      </div>
+      <div class="chatbot-input-container">
+        <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
+        <button onclick="sendChatMessage()" class="chatbot-send-btn" aria-label="Send Message">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================
+       SCRIPTS
+       ===================== -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/sp8U=" crossorigin=""></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Core App Scripts -->
   <script src="js/app.js"></script>
   <script src="js/counter.js"></script>
+
+
+  <!-- Leaflet Map Initialisation -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!document.getElementById('map')) return;
+
+      // Dark CartoDB tile layer (no API key needed)
+      const map = L.map('map', {
+        center: [19.076, 72.877],   // Mumbai, India
+        zoom: 12,
+        zoomControl: true,
+        scrollWheelZoom: false,
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map);
+
+      // Custom icon factory
+      function makeIcon(color) {
+        return L.divIcon({
+          className: '',
+          html: `<div style="
+            width:14px; height:14px; border-radius:50%;
+            background:${color};
+            border: 2px solid rgba(255,255,255,0.6);
+            box-shadow: 0 0 0 4px ${color}33, 0 0 12px ${color}66;
+          "></div>`,
+          iconSize: [14, 14],
+          iconAnchor: [7, 7],
+          popupAnchor: [0, -10],
+        });
+      }
+
+      const greenIcon  = makeIcon('#10B981');
+      const blueIcon   = makeIcon('#3B82F6');
+      const yellowIcon = makeIcon('#FBBF24');
+
+      // Restaurant markers
+      const restaurants = [
+        { lat: 19.0825, lng: 72.8916, name: 'Grand Royal Hotel', info: '45 kg fresh meals available · Pickup by 8 PM' },
+        { lat: 19.0605, lng: 72.8346, name: 'Greenwood Gourmet', info: '80 kg bakery surplus · Pickup ETA: 15 min' },
+        { lat: 19.1136, lng: 72.8697, name: 'The Spice Route', info: '30 kg cooked food · Assigned to Feeding Hope' },
+      ];
+
+      restaurants.forEach(r => {
+        L.marker([r.lat, r.lng], { icon: greenIcon })
+          .addTo(map)
+          .bindPopup(`<p class="map-popup-type restaurant">🍃 Food Donor</p><p class="map-popup-title">${r.name}</p><p class="map-popup-info">${r.info}</p>`);
+      });
+
+      // NGO markers
+      const ngos = [
+        { lat: 19.0728, lng: 72.8826, name: 'Feeding Hope Foundation', info: 'Capacity: 200 meals · Active pickups: 3' },
+        { lat: 19.0458, lng: 72.8928, name: 'Roti Bank Mumbai',        info: 'Capacity: 500 meals · Active pickups: 5' },
+        { lat: 19.1020, lng: 72.8342, name: 'Annadaata Trust',         info: 'Capacity: 150 meals · Active pickups: 2' },
+      ];
+
+      ngos.forEach(n => {
+        L.marker([n.lat, n.lng], { icon: blueIcon })
+          .addTo(map)
+          .bindPopup(`<p class="map-popup-type ngo">🏛️ NGO / Relief Center</p><p class="map-popup-title">${n.name}</p><p class="map-popup-info">${n.info}</p>`);
+      });
+
+      // Courier in transit
+      L.marker([19.0680, 72.8600], { icon: yellowIcon })
+        .addTo(map)
+        .bindPopup(`<p class="map-popup-type" style="color:#FBBF24;">🛵 Courier in Transit</p><p class="map-popup-title">Volunteer #A-07</p><p class="map-popup-info">En route to Feeding Hope · ETA 8 min</p>`);
+    });
+  </script>
+
 </body>
 </html>

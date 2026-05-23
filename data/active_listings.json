@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "name": "Sunny Café",
+    "type": "Cafe",
+    "coordinates": [77.5946, 12.9716],
+    "description": "Leftover pastries and sandwiches."
+  },
+  {
+    "id": "2",
+    "name": "Green Grocery",
+    "type": "Supermarket",
+    "coordinates": [77.6080, 12.9760],
+    "description": "Excess fruits and vegetables."
+  },
+  {
+    "id": "3",
+    "name": "City Hotel",
+    "type": "Hotel",
+    "coordinates": [77.6185, 12.9833],
+    "description": "Unserved buffet leftovers."
+  }
+]

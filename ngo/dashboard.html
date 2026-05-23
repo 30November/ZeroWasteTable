@@ -244,6 +244,31 @@
         </div>
 
       </div>
+
+      <!-- AI ROUTE OPTIMIZATION PANEL -->
+      <div class="glass p-6 rounded-3xl border border-purple-500/20 bg-purple-950/5 relative overflow-hidden">
+        <div class="absolute -right-20 -top-20 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <div>
+            <h4 class="text-lg font-bold text-gray-100 flex items-center gap-2">
+              <i data-lucide="zap" class="w-5 h-5 text-purple-400"></i> AI Route Optimization Tracker
+            </h4>
+            <p class="text-xs text-gray-400 font-light mt-1">Generate multi-stop, fuel-efficient paths to pick up active listings before expiration.</p>
+          </div>
+          <button onclick="calculateOptimizedRoute()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Calculate Optimal Route
+          </button>
+        </div>
+
+        <div id="route-optimization-result" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Initial blank state or skeleton loader -->
+          <div class="md:col-span-3 py-12 text-center text-gray-500 border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-3">
+            <i data-lucide="route" class="w-8 h-8 text-gray-600"></i>
+            <p class="text-xs font-medium">No optimized route loaded. Click the button to calculate using AI model.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- FOOTER -->
@@ -296,6 +321,106 @@
     </a>
   </div>
 
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+    function calculateOptimizedRoute() {
+      const container = document.getElementById('route-optimization-result');
+      if (!container) return;
+
+      // Show skeleton loaders first
+      container.innerHTML = `
+        <div class="glass p-5 rounded-2xl border border-white/5 space-y-4 skeleton h-40"></div>
+        <div class="glass p-5 rounded-2xl border border-white/5 space-y-4 skeleton h-40"></div>
+        <div class="glass p-5 rounded-2xl border border-white/5 space-y-4 skeleton h-40"></div>
+      `;
+
+      if (typeof showToast === 'function') {
+        showToast('AI Model running: computing traffic models & dispatch windows...', 'info');
+      }
+
+      setTimeout(() => {
+        container.innerHTML = `
+          <!-- Stop 1 -->
+          <div class="glass p-5 rounded-2xl border border-emerald-500/20 bg-emerald-950/5 relative">
+            <span class="absolute top-4 right-4 text-[10px] font-mono font-bold text-emerald-400 uppercase">STOP 1</span>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                <i data-lucide="store" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h5 class="font-bold text-sm text-gray-200 font-heading">Grand Palace Hotel</h5>
+                <p class="text-[10px] text-gray-500">Pickup window: 2h remaining</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-400 font-light leading-relaxed">Collect 25 kg cooked food. High-priority temperature sensitive.</p>
+            <div class="mt-4 pt-3 border-t border-white/5 flex justify-between text-[10px] text-gray-500">
+              <span>ETA: 12 min</span>
+              <span>Dist: 3.2 km</span>
+            </div>
+          </div>
+
+          <!-- Stop 2 -->
+          <div class="glass p-5 rounded-2xl border border-blue-500/20 bg-blue-950/5 relative">
+            <span class="absolute top-4 right-4 text-[10px] font-mono font-bold text-blue-400 uppercase">STOP 2</span>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h5 class="font-bold text-sm text-gray-200 font-heading">Urban Grocers</h5>
+                <p class="text-[10px] text-gray-500">Pickup window: 4h remaining</p>
+              </div>
+            </div>
+            <p class="text-xs text-gray-400 font-light leading-relaxed">Collect 12 kg bakery leftovers. Ambient storage.</p>
+            <div class="mt-4 pt-3 border-t border-white/5 flex justify-between text-[10px] text-gray-500">
+              <span>ETA: 28 min</span>
+              <span>Dist: 5.2 km</span>
+            </div>
+          </div>
+
+          <!-- Summary Metric Card -->
+          <div class="glass p-5 rounded-2xl border border-purple-500/20 bg-purple-950/5 flex flex-col justify-between">
+            <div>
+              <h5 class="font-bold text-sm text-purple-400 mb-2 font-heading">Optimization Efficiency</h5>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-400 font-light">Fuel Saved:</span>
+                  <span class="font-bold text-gray-200 font-mono">2.1 Liters</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-400 font-light">Distance Saved:</span>
+                  <span class="font-bold text-gray-200 font-mono">18.4%</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                  <span class="text-gray-400 font-light">CO₂ Saved:</span>
+                  <span class="font-bold text-gray-200 font-mono">4.8 kg</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="dispatchOptimizedRoute()" class="mt-4 w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors">
+              Dispatch Volunteer
+            </button>
+          </div>
+        `;
+        
+        // Reinitialize Lucide icons in newly injected HTML
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+
+        if (typeof showToast === 'function') {
+          showToast('Route optimized! Recommended path updated.', 'success');
+        }
+      }, 1500);
+    }
+
+    function dispatchOptimizedRoute() {
+      if (typeof showToast === 'function') {
+        showToast('Courier #A-07 dispatched for optimal route collection.', 'success');
+      }
+    }
+  </script>
 </body>
 </html>

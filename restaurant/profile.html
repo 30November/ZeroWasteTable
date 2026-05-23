@@ -20,9 +20,10 @@
       }
     }
   </script>
-  <!-- Mapbox GL JS -->
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -188,29 +189,43 @@
     </a>
   </div>
 
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
   <script>
-    // Local coordinate map viewer initializer for profile
+    // Local static Leaflet viewer for profile
     document.addEventListener('DOMContentLoaded', () => {
-      const token = 'pk.eyJ1Ijoic2hhaGlyYWhtYW4iLCJhIjoiY2x2am44OGMxMGJ5OTJpcXo3azUwcHpxYSJ9._Jsn99lP9d1cPhT6Pec5jA';
-      const loc = [72.8777, 19.0760]; // Mumbai coordinates
+      const loc = [19.0760, 72.8777]; // [lat, lng] (Swapped for Leaflet)
 
       try {
-        mapboxgl.accessToken = token;
-        const profileMap = new mapboxgl.Map({
-          container: 'profile-map-actual',
-          style: 'mapbox://styles/mapbox/dark-v11',
+        const profileMap = L.map('profile-map-actual', {
           center: loc,
           zoom: 13,
-          interactive: false // Keep static for profile view
+          zoomControl: false,
+          dragging: false,
+          touchZoom: false,
+          scrollWheelZoom: false,
+          doubleClickZoom: false,
+          boxZoom: false
         });
 
-        new mapboxgl.Marker({ color: "#10B981" })
-          .setLngLat(loc)
-          .addTo(profileMap);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19
+        }).addTo(profileMap);
+
+        const greenIcon = L.divIcon({
+          className: '',
+          html: `<div style="width:18px;height:18px;border-radius:50%;background:#10B981;border:2px solid rgba(255,255,255,0.8);box-shadow:0 0 0 4px rgba(16,185,129,0.2),0 0 12px rgba(16,185,129,0.4);"></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9]
+        });
+
+        L.marker(loc, { icon: greenIcon }).addTo(profileMap);
 
       } catch (err) {
-        console.warn("Mapbox failed to load in static profile viewer:", err);
+        console.warn("Leaflet failed to load in static profile viewer:", err);
       }
     });
   </script>

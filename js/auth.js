@@ -132,3 +132,121 @@ function evaluatePasswordStrength(password) {
     strengthBars[2].className = 'flex-grow rounded bg-emerald-500 transition-colors';
   }
 }
+
+// ===================================
+// JWT AUTH & ROLE GUARD SIMULATION
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+  const forms = [
+    { id: 'ngo-login-form', role: 'ngo', redirect: '../ngo/dashboard.html' },
+    { id: 'ngo-register-form', role: 'ngo', redirect: '../ngo/dashboard.html' },
+    { id: 'restaurant-login-form', role: 'restaurant', redirect: '../restaurant/dashboard.html' },
+    { id: 'restaurant-register-form', role: 'restaurant', redirect: '../restaurant/dashboard.html' }
+  ];
+
+  forms.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (el) {
+      el.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Mock JWT Token generation
+        const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+        const payload = btoa(JSON.stringify({ role: f.role, name: "Verified Actor", exp: Math.floor(Date.now() / 1000) + 3600 }));
+        const mockJWT = `${header}.${payload}.mockSignatureValue`;
+
+        localStorage.setItem('zwt-token', mockJWT);
+        localStorage.setItem('zwt-role', f.role);
+        localStorage.setItem('zwt-user-email', el.querySelector('input[type="email"]')?.value || 'user@zerowaste.org');
+
+        if (typeof showToast === 'function') {
+          showToast('Authentication successful! Loading dashboard...', 'success');
+        } else {
+          alert('Login Successful!');
+        }
+
+        setTimeout(() => {
+          window.location.href = f.redirect;
+        }, 800);
+      });
+    }
+  });
+
+  // Active Route Guards check
+  checkRoutePermission();
+
+  // Attach logout handler to any logout links
+  document.querySelectorAll('a[href*="select-role.html"]').forEach(btn => {
+    // If it is in sidebar or bottom nav
+    if (btn.classList.contains('sidebar-link') || btn.textContent.includes('Logout')) {
+      btn.addEventListener('click', (e) => {
+        logoutUser(e);
+      });
+    }
+  });
+});
+
+window.loginAsAdmin = function(e) {
+  if (e) e.preventDefault();
+  
+  const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+  const payload = btoa(JSON.stringify({ role: 'admin', name: "System Administrator", exp: Math.floor(Date.now() / 1000) + 3600 }));
+  const mockJWT = `${header}.${payload}.adminSignatureValue`;
+
+  localStorage.setItem('zwt-token', mockJWT);
+  localStorage.setItem('zwt-role', 'admin');
+  localStorage.setItem('zwt-user-email', 'admin@zerowaste.org');
+
+  if (typeof showToast === 'function') {
+    showToast('Admin authorization granted.', 'success');
+  } else {
+    alert('Authorized as Admin');
+  }
+
+  setTimeout(() => {
+    // Determine relative redirect
+    const isSub = window.location.pathname.includes('/auth/');
+    window.location.href = isSub ? '../admin/dashboard.html' : 'admin/dashboard.html';
+  }, 600);
+};
+
+function checkRoutePermission() {
+  const path = window.location.pathname;
+  const currentRole = localStorage.getItem('zwt-role');
+  const currentToken = localStorage.getItem('zwt-token');
+
+  // Check path matches folder
+  if (path.includes('/ngo/')) {
+    if (!currentToken || currentRole !== 'ngo') {
+      console.warn("Unauthorized access to NGO portal.");
+      window.location.href = '../auth/select-role.html';
+    }
+  }
+  
+  if (path.includes('/restaurant/')) {
+    if (!currentToken || currentRole !== 'restaurant') {
+      console.warn("Unauthorized access to Restaurant portal.");
+      window.location.href = '../auth/select-role.html';
+    }
+  }
+
+  if (path.includes('/admin/')) {
+    if (!currentToken || currentRole !== 'admin') {
+      console.warn("Unauthorized access to Admin portal.");
+      window.location.href = '../auth/select-role.html';
+    }
+  }
+}
+
+window.logoutUser = function(e) {
+  if (e) e.preventDefault();
+  localStorage.removeItem('zwt-token');
+  localStorage.removeItem('zwt-role');
+  localStorage.removeItem('zwt-user-email');
+  
+  const isSub = window.location.pathname.includes('/ngo/') || window.location.pathname.includes('/restaurant/') || window.location.pathname.includes('/admin/');
+  const redir = isSub ? '../auth/select-role.html' : 'auth/select-role.html';
+  
+  window.location.href = redir;
+};
+

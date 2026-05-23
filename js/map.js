@@ -1,85 +1,86 @@
-// Mapbox Integration and coordinate verification
+// Leaflet-based registration map picker (replaces Mapbox usage)
 let map;
 let marker;
 
-// Default location (e.g., Mumbai, India coordinates)
-const defaultLocation = [72.8777, 19.0760];
+// Default location (Mumbai, India) as lat/lng object
+const defaultLocation = { lat: 19.0760, lng: 72.8777 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // If map container exists in registration wizard, try to load it
   if (document.getElementById('mapbox-actual-map')) {
     initRegistrationMap();
   }
 });
 
 function initRegistrationMap() {
-  // Check if Mapbox Access Token is provided.
-  // Using a sandbox/public fallback if not explicitly defined.
-  const token = 'pk.eyJ1Ijoic2hhaGlyYWhtYW4iLCJhIjoiY2x2am44OGMxMGJ5OTJpcXo3azUwcHpxYSJ9._Jsn99lP9d1cPhT6Pec5jA'; // Safe default token for sandbox demos
-  
+  const container = document.getElementById('mapbox-actual-map');
+  if (!container) return;
+
   try {
-    mapboxgl.accessToken = token;
-    
-    map = new mapboxgl.Map({
-      container: 'mapbox-actual-map',
-      style: 'mapbox://styles/mapbox/dark-v11', // Beautiful premium dark theme
-      center: defaultLocation,
-      zoom: 12
+    map = L.map('mapbox-actual-map', {
+      center: [defaultLocation.lat, defaultLocation.lng],
+      zoom: 12,
+      zoomControl: true,
+      scrollWheelZoom: false
     });
 
-    // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
 
-    // Create marker
-    marker = new mapboxgl.Marker({
-      color: "#10B981", // Matching emerald theme
-      draggable: true
-    })
-    .setLngLat(defaultLocation)
-    .addTo(map);
+    function makeIcon(color) {
+      return L.divIcon({
+        className: '',
+        html: `<div style="width:18px;height:18px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,0.8);box-shadow:0 0 0 4px ${color}33,0 0 12px ${color}66;"></div>`,
+        iconSize: [18, 18],
+        iconAnchor: [9, 9],
+        popupAnchor: [0, -10]
+      });
+    }
+
+    const greenIcon = makeIcon('#10B981');
+
+    marker = L.marker([defaultLocation.lat, defaultLocation.lng], { draggable: true, icon: greenIcon }).addTo(map);
 
     // Update coordinate fields on load
-    updateCoordinateInputs(defaultLocation[0], defaultLocation[1]);
+    updateCoordinateInputs(defaultLocation.lng, defaultLocation.lat);
 
     // Handle marker drag completion
     marker.on('dragend', () => {
-      const lngLat = marker.getLngLat();
-      updateCoordinateInputs(lngLat.lng, lngLat.lat);
+      const pos = marker.getLatLng();
+      updateCoordinateInputs(pos.lng, pos.lat);
     });
 
-    // Handle clicking anywhere on the map to re-center marker
+    // Clicking on the map moves the marker
     map.on('click', (e) => {
-      const coords = [e.lngLat.lng, e.lngLat.lat];
-      marker.setLngLat(coords);
-      updateCoordinateInputs(coords[0], coords[1]);
+      marker.setLatLng(e.latlng);
+      updateCoordinateInputs(e.latlng.lng, e.latlng.lat);
     });
 
-    // Hide simulated overlay if Mapbox loaded correctly
+    // Hide simulated overlay if Leaflet loaded correctly
     const overlay = document.getElementById('simulated-map-overlay');
-    if (overlay) {
-      overlay.style.display = 'none';
-    }
+    if (overlay) overlay.style.display = 'none';
 
   } catch (error) {
-    console.warn("Mapbox GL JS failed to load - Falling back to simulated geopicker:", error);
-    // Keep simulated overlay visual visible
+    console.warn('Leaflet failed to initialize registration map:', error);
   }
 }
 
-// Coordinate Sync Helper
+// Coordinate Sync Helper (expects lng, lat order like previous code)
 function updateCoordinateInputs(lng, lat) {
   const lngInput = document.getElementById('reg-longitude');
   const latInput = document.getElementById('reg-latitude');
-  
+
   if (lngInput && latInput) {
-    lngInput.value = lng.toFixed(6);
-    latInput.value = lat.toFixed(6);
+    lngInput.value = parseFloat(lng).toFixed(6);
+    latInput.value = parseFloat(lat).toFixed(6);
   }
 }
 
-// Function triggered on step wizard transition to reload canvas sizes
+// Called from auth wizard to let Leaflet recompute layout
 window.resizeMap = function() {
-  if (map) {
-    map.resize();
+  if (map && typeof map.invalidateSize === 'function') {
+    setTimeout(() => map.invalidateSize(), 150);
   }
 };

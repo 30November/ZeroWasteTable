@@ -20,9 +20,10 @@
       }
     }
   </script>
-  <!-- Mapbox GL JS -->
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -203,47 +204,48 @@
     </a>
   </div>
 
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
   <script>
-    // Local Full radar Mapbox configurations
+    // Local Full radar Leaflet configurations
     document.addEventListener('DOMContentLoaded', () => {
-      const token = 'pk.eyJ1Ijoic2hhaGlyYWhtYW4iLCJhIjoiY2x2am44OGMxMGJ5OTJpcXo3azUwcHpxYSJ9._Jsn99lP9d1cPhT6Pec5jA';
-      
-      // Coordinates of nearby merchants in Mumbai
+      // Coordinates of nearby merchants in Mumbai [lat, lng]
       const merchants = [
-        { name: "Grand Palace Hotel", coords: [72.8777, 19.0760], desc: "Paneer Tikka Trays (25 kg)" },
-        { name: "Greenwood Gourmet", coords: [72.8890, 19.0820], desc: "Croissants Box (12 portions)" }
+        { name: "Grand Palace Hotel", coords: [19.0760, 72.8777], desc: "Paneer Tikka Trays (25 kg)" },
+        { name: "Greenwood Gourmet", coords: [19.0820, 72.8890], desc: "Croissants Box (12 portions)" }
       ];
 
       try {
-        mapboxgl.accessToken = token;
-        const radarMap = new mapboxgl.Map({
-          container: 'radar-mapbox-actual',
-          style: 'mapbox://styles/mapbox/dark-v11',
-          center: [72.8800, 19.0780],
+        const radarMap = L.map('radar-mapbox-actual', {
+          center: [19.0780, 72.8800],
           zoom: 13
         });
 
-        radarMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19
+        }).addTo(radarMap);
 
         // Add markers for each merchant
         merchants.forEach(m => {
-          // Custom marker HTML element
-          const el = document.createElement('div');
-          el.className = 'w-6 h-6 bg-techBlue border-2 border-white rounded-full flex items-center justify-center text-white shadow-lg glow-pulse-blue cursor-pointer';
-          el.innerHTML = '🍲';
+          // Custom marker icon using L.divIcon matching the original styling
+          const customIcon = L.divIcon({
+            className: '',
+            html: `<div class="w-8 h-8 bg-techBlue border-2 border-white rounded-full flex items-center justify-center text-white shadow-lg glow-pulse-blue cursor-pointer text-sm">🍲</div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -16]
+          });
 
-          new mapboxgl.Marker(el)
-            .setLngLat(m.coords)
-            .setPopup(
-              new mapboxgl.Popup({ offset: 15 })
-                .setHTML(`<h5 class="text-xs font-bold text-gray-100">${m.name}</h5><p class="text-[10px] text-gray-400 mt-1">${m.desc}</p>`)
-            )
+          L.marker(m.coords, { icon: customIcon })
+            .bindPopup(`<h5 class="text-xs font-bold text-gray-100">${m.name}</h5><p class="text-[10px] text-gray-400 mt-1">${m.desc}</p>`)
             .addTo(radarMap);
         });
 
       } catch (err) {
-        console.warn("Mapbox GL JS failed to load in Full Radar viewer:", err);
+        console.warn("Leaflet failed to load in Full Radar viewer:", err);
       }
     });
 
