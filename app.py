@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -225,6 +225,12 @@ def nUpdate():
     return redirect("/ngo/profile")
     
 
+@app.route("/ngo/dashboard")
+def nDashboard():
+    if session.get("role",0) != 'N': 
+        return render_template("invalid.html",error="Forbidden access")
+    return render_template("ngo/dashboard.html")
+
 
 # RESTAURANT
 @app.route("/restaurant/login", methods=["GET","POST"])
@@ -311,15 +317,6 @@ def create_listing():
         listing.prepared_at = datetime.fromisoformat(data.get('prepared_at'))
         listing.expires_at = datetime.fromisoformat(data.get('expires_at'))
         listing.pickup_deadline = datetime.fromisoformat(data.get('pickup_deadline'))
-
-        image = request.files.get('image')
-        if image and image.filename:
-            filename = secure_filename(image.filename)
-            upload_folder = os.path.join(app.root_path, 'static', 'uploads')
-            os.makedirs(upload_folder, exist_ok=True)
-            filepath = os.path.join(upload_folder, filename)
-            image.save(filepath)
-            listing.image_url = f'/static/uploads/{filename}'
 
         db.session.add(listing)
         db.session.commit()
