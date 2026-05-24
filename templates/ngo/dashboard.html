@@ -51,23 +51,23 @@
 
       <!-- Navigation links -->
       <nav class="space-y-1">
-        <a href="dashboard.html" class="sidebar-link active-blue">
+        <a href="{{ url_for('nDashboard') }}" class="sidebar-link active-blue">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
           <span>Dashboard</span>
         </a>
-        <a href="nearby-donations.html" class="sidebar-link">
+        <a href="{{ url_for('nNearbyDonations') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           <span>Nearby Donations</span>
         </a>
-        <a href="my-requests.html" class="sidebar-link">
+        <a href="{{ url_for('nMyRequests') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
           <span>My Pickups</span>
         </a>
-        <a href="analytics.html" class="sidebar-link">
+        <a href="{{ url_for('nAnalytics') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
           <span>Analytics</span>
         </a>
-        <a href="profile.html" class="sidebar-link">
+        <a href="{{ url_for('nProfile') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
           <span>NGO Profile</span>
         </a>
@@ -120,8 +120,8 @@
             New surplus food listings were pinned in your local coverage zone. Check the interactive map picker to confirm volunteer dispatch routes.
           </p>
           <div class="pt-2 flex gap-4">
-            <a href="nearby-donations.html" class="px-5 py-2.5 rounded-xl bg-techBlue text-white text-xs font-bold hover:bg-blue-600 shadow-md">Find Food Maps</a>
-            <a href="my-requests.html" class="px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-xs text-gray-300 font-semibold">Active Pickups (2)</a>
+          <a href="{{ url_for('nNearbyDonations') }}" class="px-5 py-2.5 rounded-xl bg-techBlue text-white text-xs font-bold hover:bg-blue-600 shadow-md">Find Food Maps</a>
+          <a href="{{ url_for('nMyRequests') }}" class="px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-xs text-gray-300 font-semibold">Active Pickups (2)</a>
           </div>
         </div>
       </div>
@@ -192,7 +192,7 @@
         <div class="lg:col-span-2 glass p-6 rounded-2xl border border-white/5 space-y-6">
           <div class="flex justify-between items-center">
             <h4 class="text-lg font-bold text-gray-200 font-heading">Recent Collections</h4>
-            <a href="my-requests.html" class="text-xs text-techBlue hover:underline font-medium">View Pickup Logs</a>
+            <a href="{{ url_for('nMyRequests') }}" class="text-xs text-techBlue hover:underline font-medium">View Pickup Logs</a>
           </div>
 
           <div class="overflow-x-auto">
@@ -240,7 +240,7 @@
               <svg class="w-10 h-10 text-techBlue animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
             </div>
           </div>
-          <a href="nearby-donations.html" class="block w-full py-2.5 rounded-xl bg-white/5 border border-white/5 text-center text-xs font-bold hover:bg-white/10 text-gray-300">Open Full Radar Map</a>
+          <a href="{{ url_for('nNearbyDonations') }}" class="block w-full py-2.5 rounded-xl bg-white/5 border border-white/5 text-center text-xs font-bold hover:bg-white/10 text-gray-300">Open Full Radar Map</a>
         </div>
 
       </div>
@@ -303,19 +303,19 @@
 
   <!-- MOBILE BOTTOM BAR NAVIGATION -->
   <div class="bottom-nav lg:hidden">
-    <a href="dashboard.html" class="flex flex-col items-center gap-1 text-techBlue">
+    <a href="{{ url_for('nDashboard') }}" class="flex flex-col items-center gap-1 text-techBlue">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
       <span class="text-[9px] font-bold">Home</span>
     </a>
-    <a href="nearby-donations.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+    <a href="{{ url_for('nNearbyDonations') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
       <span class="text-[9px]">Radar Map</span>
     </a>
-    <a href="my-requests.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+    <a href="{{ url_for('nMyRequests') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
       <span class="text-[9px]">Pickups</span>
     </a>
-    <a href="analytics.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+    <a href="{{ url_for('nAnalytics') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
       <span class="text-[9px]">Charts</span>
     </a>

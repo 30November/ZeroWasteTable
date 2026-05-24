@@ -128,134 +128,44 @@
 
       <!-- CARDS LISTING GRID -->
       <div id="listings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        <!-- CARD 1 -->
-        <div class="glass rounded-3xl border border-white/10 overflow-hidden shadow-xl space-y-4 max-w-sm listing-card" data-diet-type="Veg">
+        {% for listing in listings %}
+        <div class="glass rounded-3xl border border-white/10 overflow-hidden shadow-xl space-y-4 max-w-sm listing-card" data-diet-type="{{ listing.food_type }}">
           <div class="h-16 bg-cyberCard border-b border-white/5 relative flex items-center justify-center overflow-hidden">
-            <span class="absolute top-4 left-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide">Vegetarian</span>
-            <span class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-yellow-950/60 border border-yellow-800/40 text-yellow-400 uppercase tracking-wide status-badge">Requested</span>
+            <span class="absolute top-4 left-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide">{{ listing.food_type }}</span>
+            <span class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-blue-950/60 border border-blue-800/40 text-blue-400 uppercase tracking-wide status-badge">{{ listing.status|title }}</span>
           </div>
 
           <div class="px-5 pb-6 space-y-4">
             <div class="flex justify-between items-start">
               <div>
-                <h4 class="text-base font-bold text-gray-100 truncate card-food-name">Paneer Masala Buffets</h4>
-                <p class="text-[10px] text-gray-500 font-medium">Grand Palace Hotel • FSSAI Approved</p>
+                <h4 class="text-base font-bold text-gray-100 truncate card-food-name">{{ listing.food_name }}</h4>
+                <p class="text-[10px] text-gray-500 font-medium">Listed Quantity</p>
               </div>
               <div class="text-right">
-                <span class="text-sm font-black text-white font-mono">25</span>
-                <span class="text-[10px] text-gray-400 font-mono">kg</span>
+                <span class="text-sm font-black text-white font-mono">{{ listing.quantity }}</span>
+                <span class="text-[10px] text-gray-400 font-mono">{{ listing.quantity_unit }}</span>
               </div>
             </div>
 
             <p class="text-xs text-gray-400 font-light leading-relaxed h-12 overflow-hidden text-ellipsis">
-              Prepared for banquet lunch, stored immediately at 4°C in steel containers. FSSAI certified.
+              {{ listing.description }}
             </p>
 
-            <!-- Expiry countdown dynamic (Set to 6h 30m ahead of system load) -->
             <div class="space-y-1.5 pt-2 border-t border-white/5">
-              <div class="flex justify-between items-center text-[10px] text-gray-500">
-                <span>EXPIRY COUNTDOWN</span>
-                <!-- Let's calculate dynamically in listings.js -->
-                <span class="font-mono text-yellow-400 font-bold" data-expiry-deadline="2026-05-23T18:30:00">Updating...</span>
-              </div>
-              <div class="w-full expiry-progress bg-white/5 relative">
-                <div class="absolute h-full rounded bg-emerald-500" style="width: 55%;"></div>
-              </div>
+              <form action="{{ url_for('rActiveListings') }}" method="POST" class="flex gap-2">
+                <input type="hidden" name="listing_id" value="{{ listing.listing_id }}">
+                <select name="status" class="w-full bg-white/5 border border-white/10 rounded px-2 py-1 text-[10px] text-gray-300 focus:outline-none">
+                  <option value="active" {% if listing.status == 'active' %}selected{% endif %}>Available</option>
+                  <option value="requested" {% if listing.status == 'requested' %}selected{% endif %}>Requested</option>
+                  <option value="pickup" {% if listing.status == 'pickup' %}selected{% endif %}>Pickup</option>
+                </select>
+                <button type="submit" class="py-1 px-3 rounded bg-ecoGreen hover:bg-emerald-600 text-[10px] font-bold text-white transition-colors">UPDATE</button>
+              </form>
             </div>
-
-            <!-- Actions buttons -->
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <button onclick="alert('Edit listing simulation triggered!')" class="py-2 rounded-lg border border-white/10 text-[10px] font-bold text-gray-300 hover:bg-white/5 transition-colors">EDIT DETAILS</button>
-              <button onclick="confirmDeleteCard(this)" class="py-2 rounded-lg border border-red-500/20 text-[10px] font-bold text-red-400 hover:bg-red-950/20 transition-colors">DELETE</button>
-            </div>
+            
           </div>
         </div>
-
-        <!-- CARD 2 -->
-        <div class="glass rounded-3xl border border-white/10 overflow-hidden shadow-xl space-y-4 max-w-sm listing-card" data-diet-type="Veg">
-          <div class="h-16 bg-cyberCard border-b border-white/5 relative flex items-center justify-center overflow-hidden">
-            <span class="absolute top-4 left-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide">Vegetarian</span>
-            <span class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide status-badge">Available</span>
-          </div>
-
-          <div class="px-5 pb-6 space-y-4">
-            <div class="flex justify-between items-start">
-              <div>
-                <h4 class="text-base font-bold text-gray-100 truncate card-food-name">Assorted Croissant Box</h4>
-                <p class="text-[10px] text-gray-500 font-medium">Grand Palace Hotel • FSSAI Approved</p>
-              </div>
-              <div class="text-right">
-                <span class="text-sm font-black text-white font-mono">12</span>
-                <span class="text-[10px] text-gray-400 font-mono">portions</span>
-              </div>
-            </div>
-
-            <p class="text-xs text-gray-400 font-light leading-relaxed h-12 overflow-hidden text-ellipsis">
-              Freshly baked breakfast boxes containing almond and butter croissant packets. Unopened.
-            </p>
-
-            <!-- Expiry countdown dynamic (Set to 11h ahead of system load) -->
-            <div class="space-y-1.5 pt-2 border-t border-white/5">
-              <div class="flex justify-between items-center text-[10px] text-gray-500">
-                <span>EXPIRY COUNTDOWN</span>
-                <span class="font-mono text-emerald-400 font-bold" data-expiry-deadline="2026-05-23T23:00:00">Updating...</span>
-              </div>
-              <div class="w-full expiry-progress bg-white/5 relative">
-                <div class="absolute h-full rounded bg-emerald-500" style="width: 80%;"></div>
-              </div>
-            </div>
-
-            <!-- Actions buttons -->
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <button onclick="alert('Edit listing simulation triggered!')" class="py-2 rounded-lg border border-white/10 text-[10px] font-bold text-gray-300 hover:bg-white/5 transition-colors">EDIT DETAILS</button>
-              <button onclick="confirmDeleteCard(this)" class="py-2 rounded-lg border border-red-500/20 text-[10px] font-bold text-red-400 hover:bg-red-950/20 transition-colors">DELETE</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 3 -->
-        <div class="glass rounded-3xl border border-white/10 overflow-hidden shadow-xl space-y-4 max-w-sm listing-card opacity-60" data-diet-type="Non-Veg">
-          <div class="h-16 bg-cyberCard border-b border-white/5 relative flex items-center justify-center overflow-hidden">
-            <span class="absolute top-4 left-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-red-950/60 border border-red-800/40 text-red-400 uppercase tracking-wide">Non-Vegetarian</span>
-            <span class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-blue-950/60 border border-blue-800/40 text-blue-400 uppercase tracking-wide status-badge">Picked Up</span>
-          </div>
-
-          <div class="px-5 pb-6 space-y-4">
-            <div class="flex justify-between items-start">
-              <div>
-                <h4 class="text-base font-bold text-gray-100 truncate card-food-name">Chicken Biryani Trays</h4>
-                <p class="text-[10px] text-gray-500 font-medium">Grand Palace Hotel • FSSAI Approved</p>
-              </div>
-              <div class="text-right">
-                <span class="text-sm font-black text-white font-mono">18</span>
-                <span class="text-[10px] text-gray-400 font-mono">kg</span>
-              </div>
-            </div>
-
-            <p class="text-xs text-gray-400 font-light leading-relaxed h-12 overflow-hidden text-ellipsis">
-              Freshly prepared biryani leftovers from banquet wedding reception, stored at 2°C.
-            </p>
-
-            <!-- Expiry countdown dynamic (Already expired in past to showcase expired stats!) -->
-            <div class="space-y-1.5 pt-2 border-t border-white/5">
-              <div class="flex justify-between items-center text-[10px] text-gray-500">
-                <span>EXPIRY STATUS</span>
-                <span class="font-mono text-red-500 font-bold" data-expiry-deadline="2026-05-23T10:00:00">EXPIRED</span>
-              </div>
-              <div class="w-full bg-white/5 h-1 rounded overflow-hidden">
-                <div class="h-full bg-red-500" style="width: 100%;"></div>
-              </div>
-            </div>
-
-            <!-- Actions buttons -->
-            <div class="grid grid-cols-2 gap-3 pt-2">
-              <button disabled class="py-2 rounded-lg border border-white/5 text-[10px] text-gray-600 cursor-not-allowed">EDIT DETAILS</button>
-              <button onclick="confirmDeleteCard(this)" class="py-2 rounded-lg border border-red-500/20 text-[10px] font-bold text-red-400 hover:bg-red-950/20 transition-colors">DELETE</button>
-            </div>
-          </div>
-        </div>
-
+        {% endfor %}
       </div>
     </div>
 

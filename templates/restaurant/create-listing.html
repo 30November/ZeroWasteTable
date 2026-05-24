@@ -169,50 +169,36 @@
           </form>
         </div>
 
-        <!-- Live Preview Card Column -->
+        <!-- Pending Requests Column -->
         <div class="lg:col-span-5 sticky top-28 space-y-6">
           <div class="flex items-center gap-2 text-xs font-mono text-gray-500 uppercase tracking-widest">
-            <span class="w-2 h-2 rounded-full bg-ecoGreen animate-ping"></span> Live Portal Preview
+            <span class="w-2 h-2 rounded-full bg-techBlue animate-ping"></span> Incoming Requests
           </div>
 
-          <!-- Glass Card Representation -->
-          <div class="glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl space-y-4 max-w-sm mx-auto">
-            <!-- Top Header Area -->
-            <div class="h-16 bg-cyberCard/80 border-b border-white/5 relative flex items-center justify-start px-5 overflow-hidden">
-              <span id="preview-badge-type" class="px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide">Vegetarian</span>
-            </div>
-
-            <!-- Card Details -->
-            <div class="px-5 pb-6 space-y-4">
-              <div class="flex justify-between items-start">
-                <div>
-                  <h4 id="preview-food-name" class="text-base font-bold text-gray-100 truncate max-w-[200px]">Paneer Butter Masala</h4>
-                  <p class="text-[10px] text-gray-500 font-medium">Grand Palace Hotel • FSSAI Approved</p>
+          <div class="space-y-4 max-w-sm mx-auto">
+            {% if pending_requests %}
+              {% for req, listing, ngo in pending_requests %}
+              <div class="glass rounded-2xl border border-white/10 p-5 space-y-4">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="text-sm font-bold text-gray-100">{{ ngo.ngo_name }}</h4>
+                    <p class="text-[10px] text-gray-500">Wants: {{ listing.food_name }} ({{ req.requested_qty }} {{ listing.quantity_unit }})</p>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-yellow-950/60 text-yellow-400 border border-yellow-800/40">PENDING</span>
                 </div>
-                <div class="text-right">
-                  <span id="preview-food-qty" class="text-sm font-black text-white font-mono">25</span>
-                  <span id="preview-food-unit" class="text-[10px] text-gray-400 font-mono">kg</span>
-                </div>
+                
+                <form action="{{ url_for('accept_request', req_id=req.request_id) }}" method="POST">
+                  <button type="submit" class="w-full py-2 rounded-lg bg-techBlue hover:bg-blue-600 text-[10px] font-bold text-white shadow-md transition-colors">
+                    ACCEPT REQUEST
+                  </button>
+                </form>
               </div>
-
-              <p id="preview-food-desc" class="text-xs text-gray-400 font-light leading-relaxed h-12 overflow-hidden text-ellipsis">
-                Prepared for banquet lunch, stored immediately at 4°C in steel containers. FSSAI certified.
-              </p>
-
-              <!-- Live Expiry timers indicators -->
-              <div class="space-y-1.5 pt-2 border-t border-white/5">
-                <div class="flex justify-between items-center text-[10px] text-gray-500">
-                  <span>EXPIRY COUNTDOWN</span>
-                  <span class="font-mono text-yellow-400 font-bold">11h 24m remaining</span>
-                </div>
-                <div class="w-full expiry-progress bg-white/5 relative">
-                  <div class="absolute h-full rounded bg-emerald-500" style="width: 70%;"></div>
-                </div>
+              {% endfor %}
+            {% else %}
+              <div class="glass rounded-2xl border border-white/10 p-5 text-center text-sm text-gray-400">
+                No pending requests at the moment.
               </div>
-
-              <!-- Quick mock action button -->
-              <button disabled class="w-full py-2.5 rounded-xl bg-white/5 border border-white/5 text-[10px] font-semibold text-gray-400 cursor-not-allowed">REQUEST PICKUP (NGO VIEW)</button>
-            </div>
+            {% endif %}
           </div>
         </div>
 
