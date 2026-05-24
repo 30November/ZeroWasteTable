@@ -117,7 +117,8 @@ def home():
     func.count(Donation.donation_id).label("count"),
     func.sum(Donation.actual_qty).label("sum_qty"),
     ).first()
-    return render_template("index.html",c = result.count, s = int(result.sum_qty) , e = round(2.5*result.sum_qty,2))
+    r = result.sum_qty
+    return render_template("index.html",c = result.count, s = int(r) if r else 0 , e = round(2.5*(r if r else 0),2))
 
 
 @app.route("/login")
