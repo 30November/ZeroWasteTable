@@ -94,7 +94,7 @@
         <h3 class="text-base font-bold text-gray-100">Surplus Food Radar</h3>
         
         <div class="relative focus-within:text-techBlue">
-          <input type="text" id="search-food" onkeyup="filterRadar()" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-gray-200 focus:outline-none focus:border-techBlue/30" placeholder="Search nearby food...">
+          <input type="text" id="search-food" name="q" onkeyup="filterRadar()" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-gray-200 focus:outline-none focus:border-techBlue/30" placeholder="Search nearby food...">
           <span class="absolute left-3 top-3 text-gray-500">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </span>
@@ -166,12 +166,12 @@
         <form class="space-y-4" onsubmit="event.preventDefault(); alert('Redirection dispatch matched! Volunteer routing coordinates pushed.'); toggleModal('request-donation-modal'); window.location.href='my-requests.html';">
           <div class="space-y-1.5">
             <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Estimated Dispatch ETA (mins)</label>
-            <input type="number" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-techBlue" placeholder="e.g. 20">
+            <input type="number" name="eta_minutes" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-techBlue" placeholder="e.g. 20">
           </div>
 
           <div class="space-y-1.5">
             <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Dispatch Vehicle Configuration</label>
-            <select class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-techBlue">
+            <select name="vehicle_type" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-techBlue">
               <option value="bike">Electric Cargo Bike (E-Bike)</option>
               <option value="auto">Electric Three-Wheeler (Eco-Auto)</option>
               <option value="van">Cooling Storage Cargo Van</option>

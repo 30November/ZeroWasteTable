@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from datetime import datetime
+import os
+from werkzeug.utils import secure_filename
 
 app =  Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -64,7 +66,26 @@ class NGO(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
 
+
+
+class FoodListing(db.Model):
+    listing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    restaurant_id = db.Column(db.Integer, nullable=False)
+    food_name = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    quantity = db.Column(db.Float, nullable=False)
+    quantity_unit = db.Column(db.String(50), nullable=True)
+    food_type = db.Column(db.String(50), nullable=False)
+    prepared_at = db.Column(db.DateTime, nullable=False)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    pickup_deadline = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), default='active')
+    allergens = db.Column(db.String(255), nullable=True)
+    image_url = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
 @app.route("/")
+
 def home():
     return render_template("index.html")
 
@@ -208,6 +229,7 @@ def rRegister():
         user.phone = data["phone"]
         user.password = generate_password_hash(data["password"])
         user.role = 'R'
+        user.role_id = r.restaurant_id
         db.session.add(user)
         db.session.commit()
 
@@ -226,6 +248,43 @@ def rDashboard():
     return render_template("/restaurant/dashboard.html")
 
 
+
+@app.route('/restaurant/create-listing', methods=['GET','POST'])
+def create_listing():
+    if session.get('role',0) != 'R':
+        return render_template('invalid.html', error='Forbidden access')
+
+    if request.method == 'POST':
+        data = request.form
+        listing = FoodListing()
+        listing.restaurant_id = session.get('id')
+        listing.food_name = data.get('food_name')
+        listing.description = data.get('description')
+        try:
+            listing.quantity = float(data.get('quantity') or 0)
+        except:
+            listing.quantity = 0
+        listing.quantity_unit = data.get('quantity_unit')
+        listing.food_type = data.get('food_type')
+        listing.allergens = data.get('allergens')
+        listing.prepared_at = datetime.fromisoformat(data.get('prepared_at'))
+        listing.expires_at = datetime.fromisoformat(data.get('expires_at'))
+        listing.pickup_deadline = datetime.fromisoformat(data.get('pickup_deadline'))
+
+        image = request.files.get('image')
+        if image and image.filename:
+            filename = secure_filename(image.filename)
+            upload_folder = os.path.join(app.root_path, 'static', 'uploads')
+            os.makedirs(upload_folder, exist_ok=True)
+            filepath = os.path.join(upload_folder, filename)
+            image.save(filepath)
+            listing.image_url = f'/static/uploads/{filename}'
+
+        db.session.add(listing)
+        db.session.commit()
+        return render_template('restaurant/active-listings.html')
+
+    return render_template('restaurant/create-listing.html')
 
 @app.route("/logout")
 def logout():

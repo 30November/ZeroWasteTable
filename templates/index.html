@@ -72,7 +72,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
 
       <!-- Logo -->
-      <a href="index.html" class="flex items-center gap-3 group" aria-label="ZeroWasteTable home">
+      <a href="{{ url_for('home') }}" class="flex items-center gap-3 group" aria-label="ZeroWasteTable home">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300" aria-hidden="true">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -96,8 +96,8 @@
         <button id="dark-mode-toggle" aria-label="Switch to light mode">
           <!-- Icon injected by JS -->
         </button>
-        <a href="auth/select-role.html" class="px-5 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
-        <a href="auth/select-role.html" class="px-5 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-500/20 glow-pulse-green">Get Started</a>
+        <a href="{{ url_for('login') }}" class="px-5 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
+        <a href="{{ url_for('register') }}" class="px-5 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg hover:shadow-emerald-500/20 glow-pulse-green">Get Started</a>
       </div>
 
       <!-- Mobile menu trigger -->
@@ -122,8 +122,8 @@
       <a href="#sdgs"         class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">SDG Alignment</a>
       <a href="#testimonials" class="block text-base font-medium text-gray-300 hover:text-ecoGreen py-1" role="menuitem">Testimonials</a>
       <div class="pt-2 flex flex-col gap-3">
-        <a href="auth/select-role.html" class="block w-full text-center px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
-        <a href="auth/select-role.html" class="block w-full text-center px-4 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg">Get Started</a>
+        <a href="{{ url_for('login') }}" class="block w-full text-center px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-all">Sign In</a>
+        <a href="{{ url_for('register') }}" class="block w-full text-center px-4 py-2.5 rounded-xl bg-ecoGreen text-white text-sm font-semibold hover:bg-emerald-600 transition-all shadow-lg">Get Started</a>
       </div>
     </div>
   </header>
@@ -153,14 +153,14 @@
         </p>
 
         <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
-          <a href="auth/select-role.html"
+          <a href="{{ url_for('register') }}"
              class="px-8 py-4 rounded-xl bg-ecoGreen text-white font-bold text-base hover:bg-emerald-600 shadow-xl shadow-emerald-500/10 hover:shadow-emerald-500/25 transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3">
             <span>List Surplus Food</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
             </svg>
           </a>
-          <a href="auth/select-role.html"
+          <a href="{{ url_for('register') }}"
              class="px-8 py-4 rounded-xl glass border border-white/10 hover:bg-white/5 text-gray-200 font-bold text-base transform hover:-translate-y-1 transition-all duration-200 flex items-center justify-center gap-3">
             <svg class="w-5 h-5 text-techBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -781,7 +781,7 @@
         </div>
       </div>
       <div class="chatbot-input-container">
-        <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
+        <input type="text" id="chatbot-input" name="message" class="chatbot-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
         <button onclick="sendChatMessage()" class="chatbot-send-btn" aria-label="Send Message">
           <i data-lucide="send" class="w-4 h-4"></i>
         </button>

@@ -32,7 +32,7 @@
 
   <!-- Header -->
   <header class="w-full py-6 px-8 flex justify-between items-center relative z-10">
-    <a href="../index.html" class="flex items-center gap-3">
+    <a href="{{ url_for('home') }}" class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center shadow-lg">
         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -40,7 +40,7 @@
       </div>
       <span class="font-bold text-lg text-gray-200">ZeroWasteTable</span>
     </a>
-    <a href="select-role.html" class="text-xs text-gray-400 hover:text-white flex items-center gap-1.5">
+    <a href="{{ url_for('login') }}" class="text-xs text-gray-400 hover:text-white flex items-center gap-1.5">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Choose Role
     </a>
   </header>
@@ -77,7 +77,7 @@
       </div>
 
       <!-- Registration Wizard Form -->
-      <form id="ngo-register-form" class="space-y-6" action="../ngo/dashboard.html">
+      <form id="ngo-register-form" class="space-y-6" action="{{ url_for('nRegister') }}" method="post">
         
         <!-- STEP 1: PERSONAL ACCOUNT INFO -->
         <div id="step-section-1" class="form-step active space-y-6">
@@ -89,22 +89,22 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Full Name</label>
-              <input type="text" id="reg-name" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="Jane Doe">
+              <input type="text" id="reg-name" name="name" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="Jane Doe">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Contact Number</label>
-              <input type="tel" id="reg-phone" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="+91 98765 11223">
+              <input type="tel" id="reg-phone" name="phone" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="+91 98765 11223">
             </div>
           </div>
 
           <div class="space-y-2">
             <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Email Address</label>
-            <input type="email" id="reg-email" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="ops@feedinghope.org">
+            <input type="email" id="reg-email" name="email" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="ops@feedinghope.org">
           </div>
 
           <div class="space-y-2">
             <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Password</label>
-            <input type="password" id="reg-password" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="Minimum 8 characters">
+            <input type="password" id="reg-password" name="password" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="Minimum 8 characters">
             <!-- Password strength indicator -->
             <div class="flex gap-1.5 h-1 pt-1.5">
               <div id="strength-bar-1" class="flex-grow rounded bg-white/5 transition-colors"></div>
@@ -128,22 +128,22 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">NGO Name</label>
-              <input type="text" id="reg-ngo-name" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="Feeding Hope Foundation">
+              <input type="text" id="reg-ngo-name" name="nname" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="Feeding Hope Foundation">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Registry Registration Number</label>
-              <input type="text" id="reg-number" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="NGO-1234-A5">
+              <input type="text" id="reg-number" name="regno" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="NGO-1234-A5">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Storage Capacity (Meals / Day)</label>
-              <input type="number" id="reg-capacity" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="e.g. 500">
+              <input type="number" id="reg-capacity" name="capacity" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="e.g. 500">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Focus Target Area</label>
-              <select id="reg-focus" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-techBlue">
+              <select id="reg-focus" name="type" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-techBlue">
                 <option value="homeless">Shelters & Homeless Feeding</option>
                 <option value="children">Orphanages & Child Care Centers</option>
                 <option value="disaster">Disaster & Crisis Relief</option>
@@ -156,11 +156,11 @@
           <div class="grid grid-cols-3 gap-4">
             <div class="col-span-2 space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Office Street Address</label>
-              <input type="text" id="reg-address" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="456 Relief Ave, Block C">
+              <input type="text" id="reg-address" name="address" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="456 Relief Ave, Block C">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Pincode</label>
-              <input type="text" id="reg-pincode" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="400002">
+              <input type="text" id="reg-pincode" name="pincode" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none glow-border-blue" placeholder="400002">
             </div>
           </div>
 
@@ -192,11 +192,11 @@
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1.5">
               <label class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Longitude Coordinate</label>
-              <input type="text" readonly id="reg-longitude" class="w-full bg-cyberDark/40 border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-400 focus:outline-none" value="72.8790">
+              <input type="text" readonly id="reg-longitude" name="lon" class="w-full bg-cyberDark/40 border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-400 focus:outline-none" value="72.8790">
             </div>
             <div class="space-y-1.5">
               <label class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Latitude Coordinate</label>
-              <input type="text" readonly id="reg-latitude" class="w-full bg-cyberDark/40 border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-400 focus:outline-none" value="19.0785">
+              <input type="text" readonly id="reg-latitude" name="lat" class="w-full bg-cyberDark/40 border border-white/5 rounded-xl px-3 py-2 text-xs text-gray-400 focus:outline-none" value="19.0785">
             </div>
           </div>
 
