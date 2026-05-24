@@ -324,9 +324,33 @@ def create_listing():
 
         db.session.add(listing)
         db.session.commit()
-        return render_template('restaurant/active-listings.html')
+        return redirect(url_for('rActiveListings'))
 
     return render_template('restaurant/create-listing.html')
+
+@app.route("/restaurant/active-listings")
+def rActiveListings():
+    if session.get("role",0) != 'R': 
+        return render_template("invalid.html",error="Forbidden access")
+    return render_template("restaurant/active-listings.html")
+
+@app.route("/restaurant/analytics")
+def rAnalytics():
+    if session.get("role",0) != 'R': 
+        return render_template("invalid.html",error="Forbidden access")
+    return render_template("restaurant/analytics.html")
+
+@app.route("/restaurant/notifications")
+def rNotifications():
+    if session.get("role",0) != 'R': 
+        return render_template("invalid.html",error="Forbidden access")
+    return render_template("restaurant/notifications.html")
+
+@app.route("/restaurant/profile")
+def rProfile():
+    if session.get("role",0) != 'R': 
+        return render_template("invalid.html",error="Forbidden access")
+    return render_template("restaurant/profile.html")
 
 @app.route("/logout")
 def logout():

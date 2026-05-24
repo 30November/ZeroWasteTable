@@ -102,50 +102,50 @@
     <div class="flex-grow p-6 sm:p-8 max-w-4xl mx-auto w-full space-y-8">
       
       <div class="glass p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-6">
-          <div>
-            <h3 class="text-lg font-bold text-gray-100">Organization Parameters</h3>
-            <p class="text-xs text-gray-400 font-light mt-1">Configure storage metrics and geographic focus bounds.</p>
+        <form id="ngo-update-form" class="space-y-6" action="{{ url_for('nUpdate') }}" method="post">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-6">
+            <div>
+              <h3 class="text-lg font-bold text-gray-100">Organization Parameters</h3>
+              <p class="text-xs text-gray-400 font-light mt-1">Configure storage metrics and geographic focus bounds.</p>
+            </div>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-techBlue text-white text-xs font-bold hover:bg-blue-600 shadow-md">Save Changes</button>
           </div>
-          <button onclick="alert('NGO profile metrics synced successfully!')" class="px-5 py-2.5 rounded-xl bg-techBlue text-white text-xs font-bold hover:bg-blue-600 shadow-md">Save Changes</button>
-        </div>
 
-        <form class="space-y-6" action="{{ url_for('nUpdate') }}" method="post">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">NGO / Foundation Name</label>
-              <input type="text" name="name" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="Feeding Hope Foundation">
+              <input type="text" name="name" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="{{ n.ngo_name }}">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Registry ID Number</label>
-              <input type="text" name="reg" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="NGO-1234-A5">
+              <input type="text" name="reg" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="{{ n.registration_no }}">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Administrative Email</label>
-              <input type="email" name="email" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="ops@feedinghope.org">
+              <input type="email" name="email" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="{{ email }}">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Contact Number</label>
-              <input type="tel" name="phone" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="+91 98765 11223">
+              <input type="tel" name="phone" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="{{ phone }}">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Storage Capacity (Meals/Day)</label>
-              <input type="number" name="cap" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="500">
+              <input type="number" name="cap" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-techBlue/30" value="{{ n.capacity }}">
             </div>
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Focus Target Sector</label>
               <select name="cat" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-techBlue">
-                <option value="homeless">Shelters & Homeless Feeding</option>
-                <option value="children">Orphanages & Child Care Centers</option>
-                <option value="disaster">Disaster & Crisis Relief</option>
-                <option value="slum">Low-Income Neighborhoods</option>
-                <option value="canteen">Subsidized Community Kitchens</option>
+                <option value="homeless" {% if n.focus_area == 'homeless' %}selected{% endif %}>Shelters & Homeless Feeding</option>
+                <option value="children" {% if n.focus_area == 'children' %}selected{% endif %}>Orphanages & Child Care Centers</option>
+                <option value="disaster" {% if n.focus_area == 'disaster' %}selected{% endif %}>Disaster & Crisis Relief</option>
+                <option value="slum" {% if n.focus_area == 'slum' %}selected{% endif %}>Low-Income Neighborhoods</option>
+                <option value="canteen" {% if n.focus_area == 'canteen' %}selected{% endif %}>Subsidized Community Kitchens</option>
               </select>
             </div>
           </div>

@@ -69,7 +69,7 @@
     </div>
 
     <!-- Sidebar Footer -->
-    <a href="../auth/select-role.html" onclick="logoutUser(event)" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
+    <a href="{{ url_for('logout') }}" onclick="logoutUser(event)" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
       <i data-lucide="log-out" class="w-5 h-5"></i>
       <span>Logout</span>
     </a>
