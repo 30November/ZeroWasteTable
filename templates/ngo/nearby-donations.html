@@ -200,9 +200,12 @@
         {% endfor %}
       ];
 
+      let lat = {{ n.latitude }};
+      let lon = {{ n.longitude }};
+
       try {
         const radarMap = L.map('radar-mapbox-actual', {
-          center: [19.0780, 72.8800],
+          center: [lat, lon],
           zoom: 13
         });
 

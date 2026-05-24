@@ -221,7 +221,7 @@ def nNearbyDonations():
         Restaurant, FoodListing.restaurant_id == Restaurant.restaurant_id
         ).filter(FoodListing.status == 'active', Restaurant.pincode.like(NGO.query.get(session["id"]).pincode[:3]+"%")).all()
     
-    return render_template("ngo/nearby-donations.html", listings=listings)
+    return render_template("ngo/nearby-donations.html", listings=listings,n = NGO.query.get(session["id"]))
 
 @app.route("/ngo/request-donation/<int:id>", methods=["POST"])
 def nRequestDonation(id):
