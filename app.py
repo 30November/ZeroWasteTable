@@ -81,7 +81,6 @@ class FoodListing(db.Model):
     pickup_deadline = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), default='active')
     allergens = db.Column(db.String(255), nullable=True)
-    image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
 class DonationRequest(db.Model):

@@ -29,7 +29,7 @@
   <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass border-r border-white/5 p-6 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
     <div class="space-y-8">
       <!-- Sidebar Logo -->
-      <a href="{{ url_for(\'home\') }}" class="flex items-center gap-3">
+      <a href="{{ url_for('home') }}" class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center">
           <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -51,27 +51,27 @@
 
       <!-- Navigation links -->
       <nav class="space-y-1">
-        <a href="{{ url_for(\'rDashboard\') }}" class="sidebar-link">
+        <a href="{{ url_for('rDashboard') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
           <span>Dashboard</span>
         </a>
-        <a href="{{ url_for(\'create_listing\') }}" class="sidebar-link active-green">
+        <a href="{{ url_for('create_listing') }}" class="sidebar-link active-green">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
           <span>Create Listing</span>
         </a>
-        <a href="{{ url_for(\'rActiveListings\') }}" class="sidebar-link">
+        <a href="{{ url_for('rActiveListings') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           <span>Active Listings</span>
         </a>
-        <a href="{{ url_for(\'rAnalytics\') }}" class="sidebar-link">
+        <a href="{{ url_for('rAnalytics') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
           <span>Analytics</span>
         </a>
-        <a href="{{ url_for(\'rNotifications\') }}" class="sidebar-link">
+        <a href="{{ url_for('rNotifications') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
           <span>Notifications</span>
         </a>
-        <a href="{{ url_for(\'rProfile\') }}" class="sidebar-link">
+        <a href="{{ url_for('rProfile') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
           <span>Outlet Profile</span>
         </a>
@@ -79,7 +79,7 @@
     </div>
 
     <!-- Sidebar Footer -->
-    <a href="{{ url_for(\'logout\') }}" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
+    <a href="{{ url_for('logout') }}" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
       <span>Logout</span>
     </a>
@@ -107,7 +107,7 @@
           <h3 class="text-lg font-bold text-gray-100">Surplus Listing Parameters</h3>
           <p class="text-xs text-gray-400 font-light">Input quantity metrics, dietary restrictions, and safety timeframes to complete your listing.</p>
 
-          <form id="create-listing-form" action="{{ url_for('create_listing') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+          <form id="create-listing-form" action="{{ url_for('create_listing') }}" method="post" class="space-y-6">
             
             <div class="space-y-2">
               <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Food Item Name</label>
@@ -165,16 +165,6 @@
               </div>
             </div>
 
-            <!-- Image upload custom drag and drop area -->
-            <div class="space-y-2">
-              <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Upload Food Photograph</label>
-              <div class="w-full h-32 rounded-xl border border-dashed border-white/15 hover:border-ecoGreen/40 bg-white/5 flex flex-col items-center justify-center text-center p-4 cursor-pointer transition-all relative">
-                <input type="file" id="image-upload-trigger" name="image" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
-                <svg class="w-8 h-8 text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="text-xs text-gray-400">Drag & Drop photograph here or <span class="text-ecoGreen underline font-semibold">browse</span></span>
-              </div>
-            </div>
-
             <button type="submit" class="w-full py-4 rounded-xl bg-ecoGreen text-white font-bold text-sm hover:bg-emerald-600 transition-all shadow-lg shadow-ecoGreen/25">Pushed Surplus to Active Grid</button>
           </form>
         </div>
@@ -187,15 +177,9 @@
 
           <!-- Glass Card Representation -->
           <div class="glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl space-y-4 max-w-sm mx-auto">
-            <!-- Simulated Card Image -->
-            <div class="h-44 bg-cyberCard/80 border-b border-white/5 relative flex items-center justify-center text-center overflow-hidden">
-              <img id="card-preview-image" src="" class="absolute inset-0 w-full h-full object-cover hidden">
-              <!-- Placeholder Icon -->
-              <div id="card-preview-image-placeholder" class="text-gray-600 space-y-2 flex flex-col items-center">
-                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span class="text-[10px] uppercase font-mono tracking-wider">No Photo Uploaded</span>
-              </div>
-              <span id="preview-badge-type" class="absolute top-4 left-4 px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide">Vegetarian</span>
+            <!-- Top Header Area -->
+            <div class="h-16 bg-cyberCard/80 border-b border-white/5 relative flex items-center justify-start px-5 overflow-hidden">
+              <span id="preview-badge-type" class="px-2.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 uppercase tracking-wide">Vegetarian</span>
             </div>
 
             <!-- Card Details -->
@@ -245,19 +229,19 @@
 
   <!-- MOBILE BOTTOM BAR NAVIGATION -->
   <div class="bottom-nav lg:hidden">
-    <a href="{{ url_for(\'rDashboard\') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+    <a href="{{ url_for('rDashboard') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
       <span class="text-[9px]">Home</span>
     </a>
-    <a href="{{ url_for(\'create_listing\') }}" class="flex flex-col items-center gap-1 text-ecoGreen">
+    <a href="{{ url_for('create_listing') }}" class="flex flex-col items-center gap-1 text-ecoGreen">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       <span class="text-[9px] font-bold">Add Listing</span>
     </a>
-    <a href="{{ url_for(\'rActiveListings\') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+    <a href="{{ url_for('rActiveListings') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
       <span class="text-[9px]">Listings</span>
     </a>
-    <a href="{{ url_for(\'rAnalytics\') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
+    <a href="{{ url_for('rAnalytics') }}" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-200">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
       <span class="text-[9px]">Charts</span>
     </a>
