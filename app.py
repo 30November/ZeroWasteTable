@@ -6,6 +6,12 @@ from datetime import datetime
 
 from werkzeug.utils import secure_filename
 
+try:
+    from ml.ml_predict import predict_ngo_acceptance
+except Exception as e:
+    print("ML Module not found or model not trained yet:", e)
+    predict_ngo_acceptance = None
+
 app =  Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] =  False
@@ -106,9 +112,12 @@ class Donation(db.Model):
 
 
 @app.route("/")
-
 def home():
-    return render_template("index.html")
+    result = db.session.query(
+    func.count(Donation.donation_id).label("count"),
+    func.sum(Donation.actual_qty).label("sum_qty"),
+    ).first()
+    return render_template("index.html",c = result.count, s = int(result.sum_qty) , e = round(2.5*result.sum_qty,2))
 
 
 @app.route("/login")
@@ -472,6 +481,65 @@ def rActiveListings():
         return redirect(url_for('rActiveListings'))
 
     listings = FoodListing.query.filter_by(restaurant_id=session.get('id')).all()
+    
+    # --- ML PREDICTION LOGIC ---
+    restaurant = Restaurant.query.get(session.get('id'))
+    all_ngos = NGO.query.all()
+    now = datetime.now()
+    
+    for listing in listings:
+        # Skip predictions for completed or expired listings to save compute power
+        if listing.status not in ['active', 'requested']:
+            continue
+
+        best_ngo_name = None
+        best_prob = -1
+        
+        if listing.expires_at:
+            expiry_hours = max(0, (listing.expires_at - now).total_seconds() / 3600.0)
+        else:
+            expiry_hours = 24.0
+            
+        if listing.pickup_deadline:
+            pickup_hours = max(0, (listing.pickup_deadline - now).total_seconds() / 3600.0)
+        else:
+            pickup_hours = 12.0
+            
+        for ngo in all_ngos:
+            # Simple Euclidean distance proxy (1 deg ~ 111 km)
+            try:
+                dist_km = ((restaurant.latitude - ngo.latitude)**2 + (restaurant.longitude - ngo.longitude)**2)**0.5 * 111
+            except:
+                dist_km = 5.0
+                
+            cap_str = 'medium'
+            if ngo.capacity:
+                if ngo.capacity < 50: cap_str = 'low'
+                elif ngo.capacity > 200: cap_str = 'high'
+                
+            prob = None
+            if predict_ngo_acceptance:
+                prob = predict_ngo_acceptance(
+                    food_category=listing.food_type,
+                    quantity=listing.quantity,
+                    ngo_capacity=cap_str,
+                    distance_km=dist_km,
+                    expiry_hours=int(expiry_hours),
+                    pickup_deadline_hours=int(pickup_hours)
+                )
+                
+            if prob is not None and prob > best_prob:
+                best_prob = prob
+                best_ngo_name = ngo.ngo_name
+                
+        if best_ngo_name and best_prob >= 0:
+            listing.best_ngo = best_ngo_name
+            # Convert decimal probability (0.0 - 1.0) to percentage (0 - 100) if needed
+            if best_prob <= 1.0:
+                listing.best_prob = best_prob * 100
+            else:
+                listing.best_prob = best_prob
+
     return render_template("restaurant/active-listings.html", listings=listings)
 
 @app.route("/restaurant/analytics")
