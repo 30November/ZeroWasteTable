@@ -84,6 +84,48 @@ class FoodListing(db.Model):
     image_url = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
+class DonationRequest(db.Model):
+    request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    listing_id = db.Column(db.Integer, nullable=False)
+    ngo_id = db.Column(db.Integer, nullable=False)
+    requested_qty = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    note = db.Column(db.Text, nullable=True)
+    requested_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    responded_at = db.Column(db.DateTime, nullable=True)
+    picked_up_at = db.Column(db.DateTime, nullable=True)
+
+class Donation(db.Model):
+    donation_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    request_id = db.Column(db.Integer, nullable=False)
+    actual_qty = db.Column(db.Float, nullable=False)
+    actual_qty_unit = db.Column(db.String(50), nullable=True)
+    people_fed = db.Column(db.Integer, nullable=True)
+    co2_saved_kg = db.Column(db.Float, nullable=True)
+    feedback_by_ngo = db.Column(db.Text, nullable=True)
+    rating_by_ngo = db.Column(db.Integer, nullable=True)
+    donated_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+class Notification(db.Model):
+    notif_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(150), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+class ImpactMetric(db.Model):
+    metric_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, nullable=False)
+    total_donations = db.Column(db.Integer, default=0)
+    total_qty_kg = db.Column(db.Float, default=0.0)
+    people_fed = db.Column(db.Integer, default=0)
+    co2_saved_kg = db.Column(db.Float, default=0.0)
+    active_restaurants = db.Column(db.Integer, default=0)
+    active_ngos = db.Column(db.Integer, default=0)
+    updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
 @app.route("/")
 
 def home():
