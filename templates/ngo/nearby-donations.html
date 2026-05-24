@@ -66,6 +66,10 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
           <span>My Pickups</span>
         </a>
+        <a href="{{ url_for('nReview') }}" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <span>Reviews</span>
+        </a>
         <a href="{{ url_for('nAnalytics') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
           <span>Analytics</span>
@@ -117,7 +121,9 @@
               <p class="text-[8px] text-yellow-400 font-mono mt-0.5">Pickup By: {{ listing.pickup_deadline.strftime('%H:%M') }}</p>
             </div>
           </div>
-          <button onclick="openRequestModal('{{ listing.listing_id }}', '{{ listing.food_name }}', '{{ restaurant.restaurant_name }}', '{{ listing.quantity }} {{ listing.quantity_unit }}')" class="w-full py-2 rounded-lg bg-techBlue hover:bg-blue-600 text-[10px] font-bold text-white shadow-md">REQUEST PICKUP</button>
+          <form action="{{ url_for('nRequestDonation', id=listing.listing_id) }}" method="POST" class="w-full">
+            <button type="submit" class="w-full py-2 rounded-lg bg-techBlue hover:bg-blue-600 text-[10px] font-bold text-white shadow-md">REQUEST PICKUP</button>
+          </form>
         </div>
         {% endfor %}
       </div>
@@ -130,43 +136,6 @@
 
   </main>
 
-  <!-- REQUEST DONATION MODAL OVERLAY -->
-  <div id="request-donation-modal" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm px-4">
-    <div class="glass max-w-sm w-full p-6 rounded-2xl border border-white/10 space-y-4">
-      <div class="flex justify-between items-center border-b border-white/5 pb-2">
-        <h3 class="text-sm font-bold text-gray-200">Confirm Dispatch Request</h3>
-        <button onclick="toggleModal('request-donation-modal')" class="text-gray-500 hover:text-white">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-      </div>
-
-      <div class="space-y-3">
-        <div class="p-3 bg-white/5 border border-white/5 rounded-xl text-xs space-y-1">
-          <p class="text-gray-400 font-light">Food surplus: <span class="font-bold text-gray-200" id="modal-food-item">Paneer Tikka Trays</span></p>
-          <p class="text-gray-400 font-light">Food provider: <span class="font-bold text-gray-200" id="modal-rest-name">Grand Palace Hotel</span></p>
-          <p class="text-gray-400 font-light">Total Quantity: <span class="font-bold text-gray-200" id="modal-qty">25 kg</span></p>
-        </div>
-
-        <form id="request-form" method="POST" class="space-y-4">
-          <div class="space-y-1.5">
-            <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Estimated Dispatch ETA (mins)</label>
-            <input type="number" name="eta_minutes" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-techBlue" placeholder="e.g. 20">
-          </div>
-
-          <div class="space-y-1.5">
-            <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Dispatch Vehicle Configuration</label>
-            <select name="vehicle_type" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-gray-300 focus:outline-none focus:border-techBlue">
-              <option value="bike">Electric Cargo Bike (E-Bike)</option>
-              <option value="auto">Electric Three-Wheeler (Eco-Auto)</option>
-              <option value="van">Cooling Storage Cargo Van</option>
-            </select>
-          </div>
-
-          <button type="submit" class="w-full py-3 rounded-xl bg-techBlue hover:bg-blue-600 text-white text-xs font-bold shadow-lg shadow-techBlue/25">Pushed Active Request</button>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <!-- MOBILE BOTTOM BAR NAVIGATION -->
   <div class="bottom-nav lg:hidden">
@@ -235,15 +204,6 @@
         console.warn("Leaflet failed to load in Full Radar viewer:", err);
       }
     });
-
-    // Request overlay toggle
-    function openRequestModal(listingId, foodName, restName, qty) {
-      document.getElementById('modal-food-item').textContent = foodName;
-      document.getElementById('modal-rest-name').textContent = restName;
-      document.getElementById('modal-qty').textContent = qty;
-      document.getElementById('request-form').action = "/ngo/request-donation/" + listingId;
-      toggleModal('request-donation-modal');
-    }
 
     // Filter nearby list on keyup
     function filterRadar() {

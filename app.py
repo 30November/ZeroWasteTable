@@ -255,25 +255,12 @@ def nMyRequests():
     ).filter(DonationRequest.ngo_id == session["id"]).all()
     return render_template("ngo/my-requests.html", requests=requests)
 
-@app.route("/ngo/pickup-request/<int:req_id>", methods=["POST"])
-def pickup_request(req_id):
+@app.route("/ngo/mark-pickup/<int:req_id>", methods=["POST"])
+def mark_pickup(req_id):
     if session.get("role", 0) != 'N':
         return render_template("invalid.html", error="Forbidden access")
     req = DonationRequest.query.get_or_404(req_id)
     if req.ngo_id == session["id"]:
-        people_fed = request.form.get("people_fed", type=int, default=0)
-        feedback = request.form.get("feedback", default="")
-        rating = request.form.get("rating", type=int, default=5)
-        
-        donation = Donation(
-            request_id=req.request_id,
-            actual_qty=req.requested_qty,
-            people_fed=people_fed,
-            feedback_by_ngo=feedback,
-            rating_by_ngo=rating
-        )
-        db.session.add(donation)
-        
         req.status = "pickup"
         req.picked_up_at = func.now()
         listing = FoodListing.query.get(req.listing_id)
@@ -282,6 +269,54 @@ def pickup_request(req_id):
         
         db.session.commit()
     return redirect(url_for('nMyRequests'))
+
+@app.route("/ngo/review", methods=["GET", "POST"])
+def nReview():
+    if session.get("role", 0) != 'N': 
+        return render_template("invalid.html", error="Forbidden access")
+    
+    if request.method == "POST":
+        req_id = request.form.get("request_id")
+        req = DonationRequest.query.get_or_404(req_id)
+        if req.ngo_id == session["id"]:
+            people_fed = request.form.get("people_fed", type=int, default=0)
+            unit = request.form.get("unit")
+            feedback = request.form.get("feedback")
+            rating = request.form.get("rating", type=int, default=5)
+            
+            donation = Donation(
+                request_id=req.request_id,
+                actual_qty=req.requested_qty,
+                people_fed=people_fed,
+                actual_qty_unit=unit,
+                feedback_by_ngo=feedback,
+                rating_by_ngo=rating
+            )
+            db.session.add(donation)
+            db.session.commit()
+        return redirect(url_for('nReview'))
+
+    donated_request_ids = db.session.query(Donation.request_id).subquery()
+    
+    pending_reviews = db.session.query(DonationRequest, FoodListing, Restaurant).join(
+        FoodListing, DonationRequest.listing_id == FoodListing.listing_id
+    ).join(
+        Restaurant, FoodListing.restaurant_id == Restaurant.restaurant_id
+    ).filter(
+        DonationRequest.ngo_id == session["id"],
+        DonationRequest.status == 'pickup',
+        ~DonationRequest.request_id.in_(donated_request_ids)
+    ).all()
+
+    completed_reviews = db.session.query(Donation, DonationRequest, FoodListing, Restaurant).join(
+        DonationRequest, Donation.request_id == DonationRequest.request_id
+    ).join(
+        FoodListing, DonationRequest.listing_id == FoodListing.listing_id
+    ).join(
+        Restaurant, FoodListing.restaurant_id == Restaurant.restaurant_id
+    ).filter(DonationRequest.ngo_id == session["id"]).all()
+    
+    return render_template("ngo/review.html", pending_reviews=pending_reviews, completed_reviews=completed_reviews)
 
 @app.route("/ngo/analytics")
 def nAnalytics():
@@ -405,6 +440,18 @@ def accept_request(req_id):
         db.session.commit()
     return redirect(url_for('create_listing'))
 
+@app.route("/restaurant/decline-request/<int:req_id>", methods=["POST"])
+def decline_request(req_id):
+    if session.get("role", 0) != 'R':
+        return render_template('invalid.html', error='Forbidden access')
+    req = DonationRequest.query.get_or_404(req_id)
+    listing = FoodListing.query.get(req.listing_id)
+    if listing and listing.restaurant_id == session["id"]:
+        req.status = "Declined"
+        listing.status = "active"
+        db.session.commit()
+    return redirect(url_for('create_listing'))
+
 @app.route("/restaurant/active-listings", methods=['GET', 'POST'])
 def rActiveListings():
     if session.get("role",0) != 'R': 
@@ -416,6 +463,11 @@ def rActiveListings():
         listing = FoodListing.query.get(listing_id)
         if listing and listing.restaurant_id == session.get('id'):
             listing.status = new_status
+            if new_status == 'pickup':
+                req = DonationRequest.query.filter_by(listing_id=listing.listing_id, status='Requested').first()
+                if req:
+                    req.status = 'pickup'
+                    req.picked_up_at = func.now()
             db.session.commit()
         return redirect(url_for('rActiveListings'))
 

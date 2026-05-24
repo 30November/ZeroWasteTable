@@ -187,11 +187,18 @@
                   <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-yellow-950/60 text-yellow-400 border border-yellow-800/40">PENDING</span>
                 </div>
                 
-                <form action="{{ url_for('accept_request', req_id=req.request_id) }}" method="POST">
+                <div class="flex gap-2">
+                <form action="{{ url_for('accept_request', req_id=req.request_id) }}" method="POST" class="flex-1">
                   <button type="submit" class="w-full py-2 rounded-lg bg-techBlue hover:bg-blue-600 text-[10px] font-bold text-white shadow-md transition-colors">
-                    ACCEPT REQUEST
+                    ACCEPT
                   </button>
                 </form>
+                <form action="{{ url_for('decline_request', req_id=req.request_id) }}" method="POST" class="flex-1">
+                  <button type="submit" class="w-full py-2 rounded-lg bg-red-600 hover:bg-red-700 text-[10px] font-bold text-white shadow-md transition-colors">
+                    DECLINE
+                  </button>
+                </form>
+              </div>
               </div>
               {% endfor %}
             {% else %}

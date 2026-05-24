@@ -63,6 +63,10 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
           <span>My Pickups</span>
         </a>
+        <a href="{{ url_for('nReview') }}" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <span>Reviews</span>
+        </a>
         <a href="{{ url_for('nAnalytics') }}" class="sidebar-link">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
           <span>Analytics</span>
@@ -150,21 +154,9 @@
 
           {% if req.status == 'Requested' %}
           <div class="pt-6 border-t border-white/5 space-y-4">
-            <h4 class="text-sm font-bold text-gray-200">Leave Review & Confirm Pickup</h4>
-            <form action="{{ url_for('pickup_request', req_id=req.request_id) }}" method="POST" class="space-y-4">
-              <div class="space-y-2">
-                <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">People Fed (Est.)</label>
-                <input type="number" name="people_fed" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-2 text-sm text-gray-200 focus:outline-none focus:border-techBlue" placeholder="e.g. 50">
-              </div>
-              <div class="space-y-2">
-                <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Feedback</label>
-                <textarea name="feedback" rows="2" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-2 text-sm text-gray-200 focus:outline-none focus:border-techBlue" placeholder="Thanks for the donation..."></textarea>
-              </div>
-              <div class="space-y-2">
-                <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Rating (1-5)</label>
-                <input type="number" name="rating" min="1" max="5" value="5" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-2 text-sm text-gray-200 focus:outline-none focus:border-techBlue">
-              </div>
-              <button type="submit" class="px-5 py-2.5 rounded-xl bg-techBlue hover:bg-blue-600 text-white text-xs font-bold shadow-md">Confirm Collection Handoff & Submit Review</button>
+            <h4 class="text-sm font-bold text-gray-200">Confirm Pickup</h4>
+            <form action="{{ url_for('mark_pickup', req_id=req.request_id) }}" method="POST" class="space-y-4">
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-techBlue hover:bg-blue-600 text-white text-xs font-bold shadow-md">Confirm Collection Handoff</button>
             </form>
           </div>
           {% endif %}

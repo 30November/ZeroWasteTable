@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroWasteTable — Reviews & Feedback</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cyberDark: '#050505',
+            cyberCard: '#0D0F12',
+            ecoGreen: '#10B981',
+            techBlue: '#3B82F6',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-cyberDark text-gray-100 flex min-h-screen relative overflow-x-hidden">
+
+  <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 glass border-r border-white/5 p-6 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="space-y-8">
+      <a href="{{ url_for('home') }}" class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ecoGreen to-techBlue flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        </div>
+        <span class="font-bold text-base text-gray-200">ZeroWasteTable</span>
+      </a>
+
+      <div class="p-3 bg-white/5 border border-white/5 rounded-xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-techBlue/10 flex items-center justify-center text-techBlue font-bold">FH</div>
+        <div>
+          <h4 class="text-xs font-bold text-gray-200">Feeding Hope Foundation</h4>
+          <span class="text-[9px] text-gray-500 font-mono tracking-widest uppercase">REG: NGO-1234-A5</span>
+        </div>
+      </div>
+
+      <nav class="space-y-1">
+        <a href="{{ url_for('nDashboard') }}" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('nNearbyDonations') }}" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span>Nearby Donations</span>
+        </a>
+        <a href="{{ url_for('nMyRequests') }}" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+          <span>My Pickups</span>
+        </a>
+        <a href="{{ url_for('nReview') }}" class="sidebar-link active-blue">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          <span>Reviews</span>
+        </a>
+        <a href="{{ url_for('nAnalytics') }}" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+          <span>Analytics</span>
+        </a>
+      </nav>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="sidebar-link text-red-400 hover:text-red-300 hover:bg-red-950/20">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+      <span>Logout</span>
+    </a>
+  </aside>
+
+  <main class="flex-1 lg:pl-64 min-h-screen flex flex-col justify-between pb-20 lg:pb-0 relative z-10">
+    <header class="h-20 glass border-b border-white/5 px-6 sm:px-8 flex justify-between items-center sticky top-0 z-30">
+      <div class="flex items-center gap-4">
+        <button onclick="document.getElementById('dashboard-sidebar').classList.toggle('-translate-x-full')" class="lg:hidden p-2 text-gray-400 hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h2 class="text-xl font-bold text-gray-100">Leave a Review</h2>
+      </div>
+    </header>
+
+    <div class="flex-grow p-6 sm:p-8 space-y-8 max-w-4xl mx-auto w-full">
+      
+      <!-- Pending Reviews Section -->
+      <div class="space-y-6">
+        <h3 class="text-lg font-bold text-gray-100">Pending Feedback Surveys</h3>
+        {% for req, listing, restaurant in pending_reviews %}
+        <div class="glass p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
+          <div class="border-b border-white/5 pb-4">
+            <h4 class="text-base font-bold text-gray-100">{{ listing.food_name }}</h4>
+            <p class="text-xs text-gray-400 font-light mt-1">Provider: {{ restaurant.restaurant_name }}</p>
+          </div>
+          
+          <form action="{{ url_for('nReview') }}" method="POST" class="space-y-4">
+            <input type="hidden" name="request_id" value="{{ req.request_id }}">
+            <div class="grid grid-cols-3 gap-4">
+              <div class="space-y-2">
+                <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">People Fed (Est.)</label>
+                <input type="number" name="people_fed" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-2 py-2 text-sm text-gray-200 focus:outline-none focus:border-techBlue" placeholder="e.g. 50">
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Unit</label>
+                <select id="food-unit-input" name="unit" class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-ecoGreen" value="kg">
+                  <option value="kg">Kilograms (kg)</option>
+                  <option value="portions">Portions / Plates</option>
+                  <option value="packets">Packets / Boxed</option>
+                  <option value="liters">Liters (L)</option>
+                </select>
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Rating (1-5)</label>
+                <input type="number" name="rating" min="1" max="5" value="5" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-2 py-2 text-sm text-gray-200 focus:outline-none focus:border-techBlue">
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Feedback & Quality Report</label>
+              <textarea name="feedback" rows="3" required class="w-full bg-cyberDark/60 border border-white/10 rounded-xl px-4 py-2 text-sm text-gray-200 focus:outline-none focus:border-techBlue" placeholder="How was the food quality? Was it packaged correctly?"></textarea>
+            </div>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-techBlue hover:bg-blue-600 text-white text-xs font-bold shadow-md">Submit Report</button>
+          </form>
+        </div>
+        {% endfor %}
+        {% if not pending_reviews %}
+          <div class="glass p-6 sm:p-8 rounded-3xl border border-white/10 text-center text-gray-400">
+            All caught up! No pending surveys.
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Completed Reviews Section -->
+      <div class="space-y-6 pt-10">
+        <h3 class="text-lg font-bold text-gray-100">Past Restaurant Interactions</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {% for donation, req, listing, restaurant in completed_reviews %}
+          <div class="glass p-5 rounded-2xl border border-white/10 space-y-2">
+            <div class="flex justify-between items-start">
+              <h4 class="text-sm font-bold text-gray-200">{{ restaurant.restaurant_name }}</h4>
+              <span class="text-xs text-yellow-400 font-bold">★ {{ donation.rating_by_ngo }}</span>
+            </div>
+            <p class="text-[10px] text-gray-500 font-light italic">"{{ donation.feedback_by_ngo }}"</p>
+            <div class="pt-2 flex justify-between text-[9px] text-gray-400 font-mono">
+              <span>Fed: {{ donation.people_fed }} people</span>
+              <span>{{ listing.food_name }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <footer class="h-16 px-8 border-t border-white/5 flex items-center justify-between text-[10px] text-gray-500">
+      <span>© 2026 ZeroWasteTable NGO Dashboard node</span>
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>
