@@ -86,7 +86,7 @@ class FoodListing(db.Model):
 class DonationRequest(db.Model):
     request_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     listing_id = db.Column(db.Integer, nullable=False)
-    ngo_id = db.Column(db.Integer, nullable=False)
+    ngo_id = db.Column(db.Integer,nullable=True)
     requested_qty = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     note = db.Column(db.Text, nullable=True)
