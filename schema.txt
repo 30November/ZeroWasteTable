@@ -1,0 +1,32 @@
+User(user_id, name, email, password_hash, phone, role, 
+is_verified, role_id, created_at)
+
+Restaurant(restaurant_id , restaurant_name, address, 
+city, pincode, latitude, longitude, fssai_license, cuisine_type, operating_hours, created_at)
+
+NGO(ngo_id , ngo_name, registration_no, address, 
+city, pincode, latitude, longitude, capacity, focus_area, created_at)
+
+FoodListing(listing_id, _restaurant_id_ , food_name, description, 
+quantity, quantity_unit, food_type, prepared_at, expires_at, pickup_deadline, status, allergens, image_url, created_at)
+
+DonationRequest(request_id, _listing_id_ , _ngo_id,_ requested_qty, 
+status, note, requested_at, responded_at, picked_up_at)
+
+Donation(donation_id, _request_id_ , actual_qty, actual_qty_unit, 
+people_fed, co2_saved_kg, feedback_by_ngo, rating_by_ngo, donated_at)
+
+Notification(notif_id, _user_id_ , type, title, message, is_read, created_at)
+
+
+...
+ImpactMetric(metric_id, date, total_donations, total_qty_kg, people_fed, co2_saved_kg, active_restaurants, active_ngos, updated_at)
+
+
+Point A:  
+Latitude: 22.5726  
+Longitude: 88.3639
+
+Point B:  
+Latitude: 22.5816  
+Longitude: 88.3639
